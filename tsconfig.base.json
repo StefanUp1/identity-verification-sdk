@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "ES2020", // almost does nothing in this context, because TS isn't building the code
+    "module": "ESNext", // Use ES Modules (import/export), don’t convert to CommonJS
+    "moduleResolution": "Bundler", // Use the bundler mode for module resolution ????
+    "strict": true, // Enable all strict type-checking options ????
+    "jsx": "react-jsx", // Use React JSX syntax
+    "skipLibCheck": true, // Skips type checking for node_modules
+    "resolveJsonModule": true, // Allow importing .json files
+    "noEmit": true // Don’t generate any output files. TypeScript is only for type checking — something else builds the code
+  }
+}
