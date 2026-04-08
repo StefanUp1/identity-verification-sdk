@@ -1,4 +1,4 @@
-import { IdentityStatus } from "./types";
+import type { IdentityStatus } from "./types";
 
 /**
  * Maps a numeric score to verification status.

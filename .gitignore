@@ -32,6 +32,8 @@ vitest.config.*.timestamp-*
 # Caches
 .cache
 .turbo
+.pnpm-store
+pnpm-store
 *.local
 
 # Editor
