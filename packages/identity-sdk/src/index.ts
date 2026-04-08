@@ -11,5 +11,11 @@ export {
   validateAddress,
   type AddressErrors,
 } from "./components/address/validateAddress.js";
-export { AddressForm, type AddressFormProps } from "./components/address/AddressForm.js";
-export { PhoneInput, type PhoneInputProps } from "./components/phone/PhoneInput.js";
+export {
+  AddressForm,
+  type AddressFormProps,
+} from "./components/address/AddressForm.js";
+export {
+  PhoneInput,
+  type PhoneInputProps,
+} from "./components/phone/PhoneInput.js";

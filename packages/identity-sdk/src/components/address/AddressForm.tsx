@@ -14,10 +14,6 @@ export type AddressFormProps = {
   errors?: AddressErrors;
   /** When false, the SDK does not track or show its own field errors. Default true. */
   showSdkErrors?: boolean;
-  /**
-   * When true, blur runs `validateAddress` for that field (SDK copy).
-   * Default false so submit-level validation in the host does not duplicate blur errors.
-   */
   validateOnBlur?: boolean;
 };
 
@@ -36,7 +32,7 @@ export function AddressForm({
   onBlur,
   errors: hostErrors,
   showSdkErrors = true,
-  validateOnBlur = false,
+  validateOnBlur = true,
 }: AddressFormProps) {
   const [internalAddress, setInternalAddress] = useState<IdentityAddress>({
     ...EMPTY_ADDRESS,
@@ -46,7 +42,9 @@ export function AddressForm({
   const address = value ?? internalAddress;
 
   /** Host `errors` entry wins; otherwise SDK blur errors when enabled. */
-  const displayErrorForField = (key: keyof IdentityAddress): string | undefined => {
+  const displayErrorForField = (
+    key: keyof IdentityAddress,
+  ): string | undefined => {
     const host = hostErrors?.[key];
     if (host !== undefined) {
       return host;
@@ -57,7 +55,10 @@ export function AddressForm({
     return sdkErrors[key];
   };
 
-  const handleFieldChange = (key: keyof IdentityAddress, fieldValue: string) => {
+  const handleFieldChange = (
+    key: keyof IdentityAddress,
+    fieldValue: string,
+  ) => {
     const nextAddress = { ...address, [key]: fieldValue };
     if (value === undefined) {
       setInternalAddress(nextAddress);

@@ -17,16 +17,12 @@ export type PhoneInputProps = {
   onChange: (phoneE164: string) => void;
   onBlur?: () => void;
   /**
-   * When defined (including `""`), the host controls the message shown under the field.
+   * When defined, the host controls the message shown under the field.
    * Use `undefined` to let the SDK show its own copy when `showSdkErrors` is true.
    */
   error?: string;
   /** When false, the SDK does not surface its own validation copy (pair with `error` from the host). Default true. */
   showSdkErrors?: boolean;
-  /**
-   * When true, blur may show required/invalid messages from the SDK.
-   * Default false so submit-level validation in the host does not duplicate blur errors.
-   */
   validateOnBlur?: boolean;
 };
 
@@ -58,7 +54,7 @@ export function PhoneInput({
   onBlur,
   error: errorMessage,
   showSdkErrors = true,
-  validateOnBlur = false,
+  validateOnBlur = true,
 }: PhoneInputProps) {
   const initialState = getStateFromE164(
     value ?? defaultValue ?? "",
