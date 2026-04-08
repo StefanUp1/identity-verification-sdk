@@ -16,6 +16,18 @@ export type PhoneInputProps = {
   value?: string;
   onChange: (phoneE164: string) => void;
   onBlur?: () => void;
+  /**
+   * When defined (including `""`), the host controls the message shown under the field.
+   * Use `undefined` to let the SDK show its own copy when `showSdkErrors` is true.
+   */
+  error?: string;
+  /** When false, the SDK does not surface its own validation copy (pair with `error` from the host). Default true. */
+  showSdkErrors?: boolean;
+  /**
+   * When true, blur may show required/invalid messages from the SDK.
+   * Default false so submit-level validation in the host does not duplicate blur errors.
+   */
+  validateOnBlur?: boolean;
 };
 
 function getStateFromE164(
@@ -44,6 +56,9 @@ export function PhoneInput({
   value,
   onChange,
   onBlur,
+  error: errorMessage,
+  showSdkErrors = true,
+  validateOnBlur = false,
 }: PhoneInputProps) {
   const initialState = getStateFromE164(
     value ?? defaultValue ?? "",
@@ -53,7 +68,7 @@ export function PhoneInput({
   const [nationalNumber, setNationalNumber] = useState(
     initialState.nationalNumber,
   );
-  const [error, setError] = useState("");
+  const [sdkError, setSdkError] = useState("");
 
   const countryOptions = useMemo(
     () =>
@@ -67,10 +82,14 @@ export function PhoneInput({
   const validateAndEmit = (value: string, selectedCountry: CountryCode) => {
     const normalized = parseAndFormatToE164(value, selectedCountry);
     if (!normalized) {
-      setError("Please enter a valid phone number.");
+      if (showSdkErrors) {
+        setSdkError("Please enter a valid phone number.");
+      }
       return;
     }
-    setError("");
+    if (showSdkErrors) {
+      setSdkError("");
+    }
     onChange(normalized);
   };
 
@@ -82,8 +101,13 @@ export function PhoneInput({
     const nextState = getStateFromE164(value, defaultCountry);
     setCountry(nextState.country);
     setNationalNumber(nextState.nationalNumber);
-    setError("");
-  }, [value, defaultCountry]);
+    if (showSdkErrors) {
+      setSdkError("");
+    }
+  }, [value, defaultCountry, showSdkErrors]);
+
+  const displayError =
+    errorMessage !== undefined ? errorMessage : showSdkErrors ? sdkError : "";
 
   return (
     <div>
@@ -102,8 +126,8 @@ export function PhoneInput({
 
           if (nextNational) {
             validateAndEmit(nextNational, nextCountry);
-          } else {
-            setError("");
+          } else if (showSdkErrors) {
+            setSdkError("");
           }
         }}
       >
@@ -126,24 +150,27 @@ export function PhoneInput({
           );
           setNationalNumber(nextNational);
           if (!nextNational) {
-            setError("");
+            if (showSdkErrors) {
+              setSdkError("");
+            }
             return;
           }
           validateAndEmit(nextNational, country);
         }}
         onBlur={() => {
-          if (!nationalNumber) {
-            setError("Phone number is required.");
-            onBlur?.();
-            return;
+          if (validateOnBlur && showSdkErrors) {
+            if (!nationalNumber) {
+              setSdkError("Phone number is required.");
+            } else {
+              validateAndEmit(nationalNumber, country);
+            }
           }
-          validateAndEmit(nationalNumber, country);
           onBlur?.();
         }}
         placeholder="Enter your number"
       />
 
-      {error && <p role="alert">{error}</p>}
+      {displayError ? <p role="alert">{displayError}</p> : null}
     </div>
   );
 }

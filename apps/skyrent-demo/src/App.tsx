@@ -39,7 +39,10 @@ function App() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <section className="demo-card">
           <h1>Phone Input Demo</h1>
-          <p>Use this form to visually test validation and E.164 output.</p>
+          <p>
+            SDK validation is on: invalid numbers while typing and blur checks
+            (including required) use the default component behavior.
+          </p>
 
           <Controller
             name="phone"
@@ -50,6 +53,7 @@ function App() {
                   value={field.value}
                   onChange={field.onChange}
                   onBlur={field.onBlur}
+                  validateOnBlur
                 />
               </>
             )}
@@ -63,7 +67,8 @@ function App() {
         <section className="demo-card">
           <h1>Address Form Demo</h1>
           <p>
-            Use this form to visually test required fields and payload updates.
+            SDK validation is on: required-field messages appear on blur; values
+            still flow to the form on every change.
           </p>
 
           <Controller
@@ -75,6 +80,7 @@ function App() {
                   value={field.value}
                   onChange={field.onChange}
                   onBlur={field.onBlur}
+                  validateOnBlur
                 />
               </>
             )}

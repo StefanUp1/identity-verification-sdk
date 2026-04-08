@@ -3,9 +3,9 @@ import { describe, expect, it, vi } from "vitest";
 import { AddressForm } from "./AddressForm";
 
 describe("AddressForm", () => {
-  it("shows required field error on blur for empty field", () => {
+  it("shows required field error on blur when validateOnBlur is enabled", () => {
     const onChange = vi.fn();
-    render(<AddressForm onChange={onChange} />);
+    render(<AddressForm onChange={onChange} validateOnBlur />);
 
     fireEvent.blur(screen.getByLabelText("Street"));
 
@@ -13,6 +13,32 @@ describe("AddressForm", () => {
     expect(alerts).toHaveLength(1);
     expect(alerts[0]).toHaveTextContent("Street is required.");
     expect(onChange).not.toHaveBeenCalled();
+  });
+
+  it("does not show SDK blur errors by default", () => {
+    const onChange = vi.fn();
+    render(<AddressForm onChange={onChange} />);
+
+    fireEvent.blur(screen.getByLabelText("Street"));
+
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+  });
+
+  it("prefers host errors over SDK blur errors", () => {
+    const onChange = vi.fn();
+    render(
+      <AddressForm
+        onChange={onChange}
+        validateOnBlur
+        errors={{ street: "Use your legal street line." }}
+      />,
+    );
+
+    fireEvent.blur(screen.getByLabelText("Street"));
+
+    expect(screen.getByRole("alert")).toHaveTextContent(
+      "Use your legal street line.",
+    );
   });
 
   it("emits address payload when all required fields become valid", () => {

@@ -7,6 +7,18 @@ export type AddressFormProps = {
   defaultValue?: Partial<IdentityAddress>;
   value?: IdentityAddress;
   onBlur?: () => void;
+  /**
+   * Host-provided messages per field. When a key is present, it wins over SDK blur validation
+   * for that field (use `undefined` on a key to omit and fall back to SDK errors).
+   */
+  errors?: AddressErrors;
+  /** When false, the SDK does not track or show its own field errors. Default true. */
+  showSdkErrors?: boolean;
+  /**
+   * When true, blur runs `validateAddress` for that field (SDK copy).
+   * Default false so submit-level validation in the host does not duplicate blur errors.
+   */
+  validateOnBlur?: boolean;
 };
 
 const EMPTY_ADDRESS: IdentityAddress = {
@@ -22,13 +34,28 @@ export function AddressForm({
   defaultValue,
   value,
   onBlur,
+  errors: hostErrors,
+  showSdkErrors = true,
+  validateOnBlur = false,
 }: AddressFormProps) {
   const [internalAddress, setInternalAddress] = useState<IdentityAddress>({
     ...EMPTY_ADDRESS,
     ...defaultValue,
   });
-  const [errors, setErrors] = useState<AddressErrors>({});
+  const [sdkErrors, setSdkErrors] = useState<AddressErrors>({});
   const address = value ?? internalAddress;
+
+  /** Host `errors` entry wins; otherwise SDK blur errors when enabled. */
+  const displayErrorForField = (key: keyof IdentityAddress): string | undefined => {
+    const host = hostErrors?.[key];
+    if (host !== undefined) {
+      return host;
+    }
+    if (!showSdkErrors) {
+      return undefined;
+    }
+    return sdkErrors[key];
+  };
 
   const handleFieldChange = (key: keyof IdentityAddress, fieldValue: string) => {
     const nextAddress = { ...address, [key]: fieldValue };
@@ -37,7 +64,10 @@ export function AddressForm({
     }
     onChange(nextAddress);
 
-    setErrors((current) => {
+    if (!showSdkErrors) {
+      return;
+    }
+    setSdkErrors((current) => {
       if (!current[key]) {
         return current;
       }
@@ -46,8 +76,10 @@ export function AddressForm({
   };
 
   const handleFieldBlur = (key: keyof IdentityAddress) => {
-    const nextErrors = validateAddress(address);
-    setErrors((current) => ({ ...current, [key]: nextErrors[key] }));
+    if (validateOnBlur && showSdkErrors) {
+      const nextErrors = validateAddress(address);
+      setSdkErrors((current) => ({ ...current, [key]: nextErrors[key] }));
+    }
     onBlur?.();
   };
 
@@ -60,7 +92,9 @@ export function AddressForm({
         onChange={(event) => handleFieldChange("street", event.target.value)}
         onBlur={() => handleFieldBlur("street")}
       />
-      {errors.street && <p role="alert">{errors.street}</p>}
+      {displayErrorForField("street") ? (
+        <p role="alert">{displayErrorForField("street")}</p>
+      ) : null}
 
       <label htmlFor="address-city">City</label>
       <input
@@ -69,7 +103,9 @@ export function AddressForm({
         onChange={(event) => handleFieldChange("city", event.target.value)}
         onBlur={() => handleFieldBlur("city")}
       />
-      {errors.city && <p role="alert">{errors.city}</p>}
+      {displayErrorForField("city") ? (
+        <p role="alert">{displayErrorForField("city")}</p>
+      ) : null}
 
       <label htmlFor="address-state">State</label>
       <input
@@ -78,7 +114,9 @@ export function AddressForm({
         onChange={(event) => handleFieldChange("state", event.target.value)}
         onBlur={() => handleFieldBlur("state")}
       />
-      {errors.state && <p role="alert">{errors.state}</p>}
+      {displayErrorForField("state") ? (
+        <p role="alert">{displayErrorForField("state")}</p>
+      ) : null}
 
       <label htmlFor="address-country">Country</label>
       <input
@@ -87,7 +125,9 @@ export function AddressForm({
         onChange={(event) => handleFieldChange("country", event.target.value)}
         onBlur={() => handleFieldBlur("country")}
       />
-      {errors.country && <p role="alert">{errors.country}</p>}
+      {displayErrorForField("country") ? (
+        <p role="alert">{displayErrorForField("country")}</p>
+      ) : null}
 
       <label htmlFor="address-postal-code">Postal code</label>
       <input
@@ -98,7 +138,9 @@ export function AddressForm({
         }
         onBlur={() => handleFieldBlur("postalCode")}
       />
-      {errors.postalCode && <p role="alert">{errors.postalCode}</p>}
+      {displayErrorForField("postalCode") ? (
+        <p role="alert">{displayErrorForField("postalCode")}</p>
+      ) : null}
     </div>
   );
 }
