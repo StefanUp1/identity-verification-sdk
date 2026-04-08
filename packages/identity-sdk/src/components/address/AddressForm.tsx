@@ -5,6 +5,8 @@ import { validateAddress, type AddressErrors } from "./validateAddress";
 export type AddressFormProps = {
   onChange: (address: IdentityAddress) => void;
   defaultValue?: Partial<IdentityAddress>;
+  value?: IdentityAddress;
+  onBlur?: () => void;
 };
 
 const EMPTY_ADDRESS: IdentityAddress = {
@@ -15,16 +17,25 @@ const EMPTY_ADDRESS: IdentityAddress = {
   postalCode: "",
 };
 
-export function AddressForm({ onChange, defaultValue }: AddressFormProps) {
-  const [address, setAddress] = useState<IdentityAddress>({
+export function AddressForm({
+  onChange,
+  defaultValue,
+  value,
+  onBlur,
+}: AddressFormProps) {
+  const [internalAddress, setInternalAddress] = useState<IdentityAddress>({
     ...EMPTY_ADDRESS,
     ...defaultValue,
   });
   const [errors, setErrors] = useState<AddressErrors>({});
+  const address = value ?? internalAddress;
 
-  const handleFieldChange = (key: keyof IdentityAddress, value: string) => {
-    const nextAddress = { ...address, [key]: value };
-    setAddress(nextAddress);
+  const handleFieldChange = (key: keyof IdentityAddress, fieldValue: string) => {
+    const nextAddress = { ...address, [key]: fieldValue };
+    if (value === undefined) {
+      setInternalAddress(nextAddress);
+    }
+    onChange(nextAddress);
 
     setErrors((current) => {
       if (!current[key]) {
@@ -32,16 +43,12 @@ export function AddressForm({ onChange, defaultValue }: AddressFormProps) {
       }
       return { ...current, [key]: undefined };
     });
-
-    const nextErrors = validateAddress(nextAddress);
-    if (Object.keys(nextErrors).length === 0) {
-      onChange(nextAddress);
-    }
   };
 
   const handleFieldBlur = (key: keyof IdentityAddress) => {
     const nextErrors = validateAddress(address);
     setErrors((current) => ({ ...current, [key]: nextErrors[key] }));
+    onBlur?.();
   };
 
   return (

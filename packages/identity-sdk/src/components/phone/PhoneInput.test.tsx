@@ -30,4 +30,17 @@ describe("PhoneInput", () => {
       "Please enter a valid phone number.",
     );
   });
+
+  it("shows required error on blur when empty", () => {
+    const onChange = vi.fn();
+    render(<PhoneInput onChange={onChange} />);
+    const phoneInput = screen.getByLabelText("Phone number");
+
+    fireEvent.blur(phoneInput);
+
+    expect(onChange).not.toHaveBeenCalled();
+    expect(screen.getByRole("alert")).toHaveTextContent(
+      "Phone number is required.",
+    );
+  });
 });

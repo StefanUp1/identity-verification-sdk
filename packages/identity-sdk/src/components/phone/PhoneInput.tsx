@@ -1,36 +1,71 @@
-import { useMemo, useState } from "react";
-import type { CountryCode } from "libphonenumber-js/min";
+import { useEffect, useMemo, useState } from "react";
 import {
-  formatNationalInput,
-  getDialCode,
-  SUPPORTED_COUNTRIES,
-  toE164,
-} from "./e164";
+  parsePhoneNumberFromString,
+  type CountryCode,
+} from "libphonenumber-js/min";
+import {
+  formatPhoneNumberAsYouType,
+  getCountryDialCode,
+  parseAndFormatToE164,
+  SUPPORTED_PHONE_COUNTRIES,
+} from "./phoneNumberUtils";
 
 export type PhoneInputProps = {
   defaultCountry?: CountryCode;
+  defaultValue?: string;
+  value?: string;
   onChange: (phoneE164: string) => void;
+  onBlur?: () => void;
 };
+
+function getStateFromE164(
+  phoneE164: string,
+  fallbackCountry: CountryCode,
+): { country: CountryCode; nationalNumber: string } {
+  const parsed = parsePhoneNumberFromString(phoneE164);
+  const parsedCountry = parsed?.country;
+
+  if (parsedCountry && SUPPORTED_PHONE_COUNTRIES.includes(parsedCountry)) {
+    return {
+      country: parsedCountry,
+      nationalNumber: parsed.nationalNumber,
+    };
+  }
+
+  return {
+    country: fallbackCountry,
+    nationalNumber: "",
+  };
+}
 
 export function PhoneInput({
   defaultCountry = "RS",
+  defaultValue,
+  value,
   onChange,
+  onBlur,
 }: PhoneInputProps) {
-  const [country, setCountry] = useState<CountryCode>(defaultCountry);
-  const [national, setNational] = useState("");
+  const initialState = getStateFromE164(
+    value ?? defaultValue ?? "",
+    defaultCountry,
+  );
+  const [country, setCountry] = useState<CountryCode>(initialState.country);
+  const [nationalNumber, setNationalNumber] = useState(
+    initialState.nationalNumber,
+  );
   const [error, setError] = useState("");
 
   const countryOptions = useMemo(
     () =>
-      SUPPORTED_COUNTRIES.map((c) => ({
+      SUPPORTED_PHONE_COUNTRIES.map((c) => ({
         code: c,
-        label: `${c} (${getDialCode(c)})`,
+        label: `${c} (${getCountryDialCode(c)})`,
       })),
     [],
   );
 
   const validateAndEmit = (value: string, selectedCountry: CountryCode) => {
-    const normalized = toE164(value, selectedCountry);
+    const normalized = parseAndFormatToE164(value, selectedCountry);
     if (!normalized) {
       setError("Please enter a valid phone number.");
       return;
@@ -38,6 +73,17 @@ export function PhoneInput({
     setError("");
     onChange(normalized);
   };
+
+  useEffect(() => {
+    if (value === undefined) {
+      return;
+    }
+
+    const nextState = getStateFromE164(value, defaultCountry);
+    setCountry(nextState.country);
+    setNationalNumber(nextState.nationalNumber);
+    setError("");
+  }, [value, defaultCountry]);
 
   return (
     <div>
@@ -48,8 +94,16 @@ export function PhoneInput({
         onChange={(event) => {
           const nextCountry = event.target.value as CountryCode;
           setCountry(nextCountry);
-          if (national) {
-            validateAndEmit(national, nextCountry);
+          const nextNational = formatPhoneNumberAsYouType(
+            nationalNumber,
+            nextCountry,
+          );
+          setNationalNumber(nextNational);
+
+          if (nextNational) {
+            validateAndEmit(nextNational, nextCountry);
+          } else {
+            setError("");
           }
         }}
       >
@@ -64,10 +118,13 @@ export function PhoneInput({
       <input
         id="national-input"
         type="tel"
-        value={national}
+        value={nationalNumber}
         onChange={(event) => {
-          const nextNational = formatNationalInput(event.target.value, country);
-          setNational(nextNational);
+          const nextNational = formatPhoneNumberAsYouType(
+            event.target.value,
+            country,
+          );
+          setNationalNumber(nextNational);
           if (!nextNational) {
             setError("");
             return;
@@ -75,11 +132,13 @@ export function PhoneInput({
           validateAndEmit(nextNational, country);
         }}
         onBlur={() => {
-          if (!national) {
-            setError("");
+          if (!nationalNumber) {
+            setError("Phone number is required.");
+            onBlur?.();
             return;
           }
-          validateAndEmit(national, country);
+          validateAndEmit(nationalNumber, country);
+          onBlur?.();
         }}
         placeholder="Enter your number"
       />

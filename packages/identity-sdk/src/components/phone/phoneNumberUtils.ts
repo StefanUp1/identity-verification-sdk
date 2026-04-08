@@ -5,7 +5,7 @@ import {
   parsePhoneNumberFromString,
 } from "libphonenumber-js/min";
 
-export const SUPPORTED_COUNTRIES: CountryCode[] = [
+export const SUPPORTED_PHONE_COUNTRIES: CountryCode[] = [
   "US",
   "CA",
   "GB",
@@ -33,11 +33,17 @@ export const SUPPORTED_COUNTRIES: CountryCode[] = [
   "BR",
 ];
 
-export function formatNationalInput(value: string, country: CountryCode): string {
+export function formatPhoneNumberAsYouType(
+  value: string,
+  country: CountryCode,
+): string {
   return new AsYouType(country).input(value);
 }
 
-export function toE164(value: string, country: CountryCode): string | null {
+export function parseAndFormatToE164(
+  value: string,
+  country: CountryCode,
+): string | null {
   const parsed = parsePhoneNumberFromString(value, country);
   if (!parsed || !parsed.isValid()) {
     return null;
@@ -45,6 +51,6 @@ export function toE164(value: string, country: CountryCode): string | null {
   return parsed.format("E.164");
 }
 
-export function getDialCode(country: CountryCode): string {
+export function getCountryDialCode(country: CountryCode): string {
   return `+${getCountryCallingCode(country)}`;
 }
