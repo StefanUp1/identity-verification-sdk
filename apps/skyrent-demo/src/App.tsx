@@ -1,135 +1,55 @@
-import { useState } from "react";
-import { Controller, useForm, useWatch } from "react-hook-form";
-import {
-  AddressForm,
-  PhoneInput,
-  SelfieCapture,
-  type IdentityAddress,
-} from "@identity-verification/sdk";
-import "./App.css";
+import type { ReactElement } from "react";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowsePage } from "./pages/browse/BrowsePage";
+import { CheckoutPage } from "./pages/checkout/CheckoutPage";
+import { ResultPage } from "./pages/result/ResultPage";
+import { VerificationPage } from "./pages/verification/VerificationPage";
+import { ROUTES } from "./shared/constants/routes";
+import { useCart } from "./state/cart/cart.hooks";
+import { AppProviders } from "./state/providers";
 
-type DemoFormValues = {
-  selfie: string;
-  phone: string;
-  address: IdentityAddress;
-};
-
-const EMPTY_ADDRESS: IdentityAddress = {
-  street: "",
-  city: "",
-  state: "",
-  country: "",
-  postalCode: "",
-};
+function RequireCart({ children }: { children: ReactElement }) {
+  const { state: cart } = useCart();
+  if (cart.length === 0) {
+    return <Navigate to={ROUTES.browse} replace />;
+  }
+  return children;
+}
 
 function App() {
-  const [submitted, setSubmitted] = useState<DemoFormValues | null>(null);
-  const { control, handleSubmit } = useForm<DemoFormValues>({
-    defaultValues: {
-      selfie: "",
-      phone: "",
-      address: EMPTY_ADDRESS,
-    },
-  });
-  const selfieValue = useWatch({ control, name: "selfie" });
-  const phoneValue = useWatch({ control, name: "phone" });
-  const addressValue = useWatch({ control, name: "address" });
-  const onSubmit = (values: DemoFormValues) => {
-    setSubmitted(values);
-  };
-
   return (
-    <main className="demo-page">
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <section className="demo-card">
-          <h1>Selfie capture</h1>
-          <p>
-            Start the camera, align your face in the oval, then capture. The
-            value is stored as a JPEG data URL for <code>IdentityInputs</code>.
-          </p>
-          <Controller
-            name="selfie"
-            control={control}
-            render={({ field }) => (
-              <SelfieCapture
-                value={field.value}
-                onChange={field.onChange}
-                onBlur={field.onBlur}
-              />
-            )}
+    <AppProviders>
+      <BrowserRouter>
+        <Routes>
+          <Route path={ROUTES.browse} element={<BrowsePage />} />
+          <Route
+            path={ROUTES.verification}
+            element={
+              <RequireCart>
+                <VerificationPage />
+              </RequireCart>
+            }
           />
-          <div className="result">
-            <strong>Selfie:</strong>{" "}
-            {selfieValue
-              ? `Captured (${Math.round(selfieValue.length / 1024)} KB data URL)`
-              : "(none yet)"}
-          </div>
-        </section>
-
-        <section className="demo-card">
-          <h1>Phone Input Demo</h1>
-          <p>
-            SDK validation is on: invalid numbers while typing and blur checks
-            (including required) use the default component behavior.
-          </p>
-
-          <Controller
-            name="phone"
-            control={control}
-            render={({ field }) => (
-              <>
-                <PhoneInput
-                  value={field.value}
-                  onChange={field.onChange}
-                  onBlur={field.onBlur}
-                  validateOnBlur
-                />
-              </>
-            )}
+          <Route
+            path={ROUTES.result}
+            element={
+              <RequireCart>
+                <ResultPage />
+              </RequireCart>
+            }
           />
-
-          <div className="result">
-            <strong>Current value:</strong> {phoneValue || "(none yet)"}
-          </div>
-        </section>
-
-        <section className="demo-card">
-          <h1>Address Form Demo</h1>
-          <p>
-            SDK validation is on: required-field messages appear on blur; values
-            still flow to the form on every change.
-          </p>
-
-          <Controller
-            name="address"
-            control={control}
-            render={({ field }) => (
-              <>
-                <AddressForm
-                  value={field.value}
-                  onChange={field.onChange}
-                  onBlur={field.onBlur}
-                  validateOnBlur
-                />
-              </>
-            )}
+          <Route
+            path={ROUTES.checkout}
+            element={
+              <RequireCart>
+                <CheckoutPage />
+              </RequireCart>
+            }
           />
-
-          <div className="result">
-            <strong>Current value:</strong> {JSON.stringify(addressValue)}
-          </div>
-        </section>
-        <section className="demo-card">
-          <button type="submit">Submit</button>
-          <div className="result">
-            <strong>Submitted payload:</strong>{" "}
-            {submitted
-              ? JSON.stringify(submitted)
-              : "(submit form to see payload)"}
-          </div>
-        </section>
-      </form>
-    </main>
+          <Route path="*" element={<Navigate to={ROUTES.browse} replace />} />
+        </Routes>
+      </BrowserRouter>
+    </AppProviders>
   );
 }
 
