@@ -32,7 +32,7 @@ export function AddressForm({
   onBlur,
   errors: hostErrors,
   showSdkErrors = true,
-  validateOnBlur = false,
+  validateOnBlur = true,
 }: AddressFormProps) {
   const [internalAddress, setInternalAddress] = useState<IdentityAddress>({
     ...EMPTY_ADDRESS,

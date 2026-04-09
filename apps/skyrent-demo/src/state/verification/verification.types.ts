@@ -1,10 +1,7 @@
-export type VerificationSnapshot = {
-  status: "verified" | "failed";
-  score: number;
-  phone: string;
-  address: string;
-  selfieUrl: string;
-} | null;
+import type { IdentityData } from "@identity-verification/sdk";
+
+/** Persisted verification outcome; aligns with SDK `IdentityData`. */
+export type VerificationSnapshot = IdentityData | null;
 
 export const VERIFICATION_ACTIONS = {
   SET: "verification/set",

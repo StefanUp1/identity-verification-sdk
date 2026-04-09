@@ -53,4 +53,12 @@ describe("cartReducer transitions", () => {
 
     expect(afterRemove).toEqual([]);
   });
+
+  it("clears all items", () => {
+    const withItems = cartReducer(initialCartState, {
+      type: CART_ACTIONS.ADD,
+      payload: { drone: filmingDrone, days: 1 },
+    });
+    expect(cartReducer(withItems, { type: CART_ACTIONS.CLEAR })).toEqual([]);
+  });
 });

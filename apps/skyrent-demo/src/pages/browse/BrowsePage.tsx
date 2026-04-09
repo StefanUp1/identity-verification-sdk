@@ -5,12 +5,10 @@ import { INVENTORY, type Drone } from "../../domain/inventory";
 import { formatCurrency, getCartTotal } from "../../domain/pricing";
 import { CART_ACTIONS } from "../../state/cart/cart.types";
 import { useCart } from "../../state/cart/cart.hooks";
-import { useVerification } from "../../state/verification/verification.hooks";
-import { ROUTES } from "../../shared/constants/routes";
+import { ROUTES } from "../../routing/routes";
 
 export function BrowsePage() {
   const { state: cart, dispatch: cartDispatch } = useCart();
-  const { state: verification } = useVerification();
   const [daysByDroneId, setDaysByDroneId] = useState<Record<string, number>>(
     {},
   );
@@ -47,7 +45,6 @@ export function BrowsePage() {
       <p className="page-subtitle">
         Browse inventory, select rental days, and build your cart.
       </p>
-
       <section className="demo-card">
         <h2>Drone inventory</h2>
         {(Object.keys(groupedInventory) as Array<Drone["category"]>).map(
@@ -109,7 +106,6 @@ export function BrowsePage() {
           ),
         )}
       </section>
-
       <section className="demo-card">
         <h2>Cart summary</h2>
         {cart.length === 0 ? (
@@ -175,23 +171,6 @@ export function BrowsePage() {
             <Link to={ROUTES.verification}>Continue to Verification</Link>
           )}
         </div>
-      </section>
-
-      <section className="demo-card">
-        <h2>Global app state snapshot</h2>
-        <p className="muted">
-          Phase 4 keeps only cart + verification in global context.
-        </p>
-        <pre className="state-preview">
-          {JSON.stringify(
-            {
-              cart,
-              verification,
-            },
-            null,
-            2,
-          )}
-        </pre>
       </section>
     </main>
   );

@@ -19,6 +19,7 @@ export {
   PhoneInput,
   type PhoneInputProps,
 } from "./components/phone/PhoneInput.js";
+export { isValidPhoneE164 } from "./components/phone/phoneNumberUtils.js";
 export {
   SelfieCapture,
   type SelfieCaptureProps,

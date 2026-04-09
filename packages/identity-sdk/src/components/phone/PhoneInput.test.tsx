@@ -30,17 +30,6 @@ describe("PhoneInput", () => {
     );
   });
 
-  it("does not show required error on blur when empty by default", () => {
-    const onChange = vi.fn();
-    render(<PhoneInput onChange={onChange} />);
-    const phoneInput = screen.getByLabelText("Phone number");
-
-    fireEvent.blur(phoneInput);
-
-    expect(onChange).not.toHaveBeenCalled();
-    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
-  });
-
   it("shows required error on blur when validateOnBlur is enabled", () => {
     const onChange = vi.fn();
     render(<PhoneInput onChange={onChange} validateOnBlur />);
@@ -84,5 +73,19 @@ describe("PhoneInput", () => {
 
     expect(onChange).not.toHaveBeenCalled();
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+  });
+
+  it("calls onChange with empty string when the user clears a valid number", () => {
+    const onChange = vi.fn();
+    render(<PhoneInput onChange={onChange} defaultCountry="US" />);
+    const phoneInput = screen.getByLabelText("Phone number");
+
+    fireEvent.change(phoneInput, {
+      target: { value: "4155552671" },
+    });
+    expect(onChange).toHaveBeenLastCalledWith("+14155552671");
+
+    fireEvent.change(phoneInput, { target: { value: "" } });
+    expect(onChange).toHaveBeenLastCalledWith("");
   });
 });

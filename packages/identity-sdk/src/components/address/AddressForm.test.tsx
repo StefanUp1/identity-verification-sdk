@@ -15,15 +15,6 @@ describe("AddressForm", () => {
     expect(onChange).not.toHaveBeenCalled();
   });
 
-  it("does not show SDK blur errors by default", () => {
-    const onChange = vi.fn();
-    render(<AddressForm onChange={onChange} />);
-
-    fireEvent.blur(screen.getByLabelText("Street"));
-
-    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
-  });
-
   it("prefers host errors over SDK blur errors", () => {
     const onChange = vi.fn();
     render(

@@ -14,6 +14,7 @@ export type PhoneInputProps = {
   defaultCountry?: CountryCode;
   defaultValue?: string;
   value?: string;
+  /** Valid E.164 when complete, or `""` when the user clears the field (controlled hosts should reset). */
   onChange: (phoneE164: string) => void;
   onBlur?: () => void;
   /**
@@ -54,7 +55,7 @@ export function PhoneInput({
   onBlur,
   error: errorMessage,
   showSdkErrors = true,
-  validateOnBlur = false,
+  validateOnBlur = true,
 }: PhoneInputProps) {
   const initialState = getStateFromE164(
     value ?? defaultValue ?? "",
@@ -122,8 +123,11 @@ export function PhoneInput({
 
           if (nextNational) {
             validateAndEmit(nextNational, nextCountry);
-          } else if (showSdkErrors) {
-            setSdkError("");
+          } else {
+            if (showSdkErrors) {
+              setSdkError("");
+            }
+            onChange("");
           }
         }}
       >
@@ -149,6 +153,7 @@ export function PhoneInput({
             if (showSdkErrors) {
               setSdkError("");
             }
+            onChange("");
             return;
           }
           validateAndEmit(nextNational, country);

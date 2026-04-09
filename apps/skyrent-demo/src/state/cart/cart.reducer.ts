@@ -41,6 +41,8 @@ export function cartReducer(state: CartState, action: CartAction): CartState {
       );
     case CART_ACTIONS.REMOVE:
       return state.filter((item) => item.droneId !== action.payload.droneId);
+    case CART_ACTIONS.CLEAR:
+      return [];
     default:
       return state;
   }

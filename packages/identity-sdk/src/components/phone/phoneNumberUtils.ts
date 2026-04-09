@@ -51,6 +51,15 @@ export function parseAndFormatToE164(
   return parsed.format("E.164");
 }
 
+/** True when `phone` is a valid E.164 string (e.g. values emitted by `PhoneInput`). */
+export function isValidPhoneE164(phone: string): boolean {
+  if (!phone.trim()) {
+    return false;
+  }
+  const parsed = parsePhoneNumberFromString(phone);
+  return Boolean(parsed?.isValid());
+}
+
 export function getCountryDialCode(country: CountryCode): string {
   return `+${getCountryCallingCode(country)}`;
 }

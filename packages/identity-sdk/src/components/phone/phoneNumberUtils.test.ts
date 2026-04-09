@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   formatPhoneNumberAsYouType,
   getCountryDialCode,
+  isValidPhoneE164,
   parseAndFormatToE164,
 } from "./phoneNumberUtils";
 
@@ -21,5 +22,10 @@ describe("phone number utils", () => {
 
   it("formats national input as user types", () => {
     expect(formatPhoneNumberAsYouType("4155552671", "US")).toContain("415");
+  });
+
+  it("isValidPhoneE164 accepts E.164 from PhoneInput", () => {
+    expect(isValidPhoneE164("+14155552671")).toBe(true);
+    expect(isValidPhoneE164("")).toBe(false);
   });
 });
