@@ -54,7 +54,7 @@ export function PhoneInput({
   onBlur,
   error: errorMessage,
   showSdkErrors = true,
-  validateOnBlur = true,
+  validateOnBlur = false,
 }: PhoneInputProps) {
   const initialState = getStateFromE164(
     value ?? defaultValue ?? "",

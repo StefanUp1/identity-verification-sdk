@@ -19,3 +19,7 @@ export {
   PhoneInput,
   type PhoneInputProps,
 } from "./components/phone/PhoneInput.js";
+export {
+  SelfieCapture,
+  type SelfieCaptureProps,
+} from "./components/selfie/SelfieCapture.js";
