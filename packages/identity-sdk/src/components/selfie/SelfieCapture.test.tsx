@@ -22,9 +22,9 @@ describe("SelfieCapture", () => {
     render(<SelfieCapture onChange={vi.fn()} />);
     fireEvent.click(screen.getByRole("button", { name: /start camera/i }));
 
-    expect(
-      await screen.findByRole("alert"),
-    ).toHaveTextContent("Camera is not available in this browser.");
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "Camera is not available in this browser.",
+    );
   });
 
   it("shows actionable guidance when camera permission is denied", async () => {

@@ -180,6 +180,7 @@ export function SelfieCapture({
     setSdkError("");
     applyCapturedUrl("");
     stopStream();
+    startCamera();
   };
 
   const hasPreview = Boolean(previewUrl);
