@@ -1,4 +1,4 @@
-import type { IdentityData, IdentityInputs } from "./types";
+import type { IdentityData, IdentityInputs } from "../types";
 import { computeWeightedScore, scoreToStatus } from "./weightedScore";
 
 export type GetIdentityDataOptions = {
