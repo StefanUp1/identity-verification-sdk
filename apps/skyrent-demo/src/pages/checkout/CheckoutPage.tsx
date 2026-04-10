@@ -1,6 +1,8 @@
 import { useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import "../browse/BrowsePage.css";
+import { RestartDemoFlow } from "../../components/RestartDemoFlow";
+import { useRestartDemoFlow } from "../../hooks/useRestartDemoFlow";
 import {
   formatCurrency,
   getCartTotal,
@@ -8,28 +10,16 @@ import {
 } from "../../domain/pricing";
 import { ROUTES } from "../../routing/routes";
 import { createRentalOrder } from "../../services/createRentalOrder";
-import { CART_ACTIONS } from "../../state/cart/cart.types";
 import { useCart } from "../../state/cart/cart.hooks";
-import { VERIFICATION_ACTIONS } from "../../state/verification/verification.types";
 import { useVerification } from "../../state/verification/verification.hooks";
 
 export function CheckoutPage() {
-  const navigate = useNavigate();
-  const { state: cart, dispatch: cartDispatch } = useCart();
-  const { state: verification, dispatch: verificationDispatch } =
-    useVerification();
+  const { state: cart } = useCart();
+  const { state: verification } = useVerification();
+  const restartFromHome = useRestartDemoFlow();
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [orderId, setOrderId] = useState<string | null>(null);
-
-  const beginNewOrder = () => {
-    cartDispatch({ type: CART_ACTIONS.CLEAR });
-    verificationDispatch({
-      type: VERIFICATION_ACTIONS.SET,
-      payload: null,
-    });
-    navigate(ROUTES.browse, { replace: true });
-  };
 
   const completeRental = async () => {
     if (!verification || cart.length === 0) {
@@ -44,7 +34,11 @@ export function CheckoutPage() {
       });
       setOrderId(id);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Could not complete order.");
+      setError(
+        e instanceof Error
+          ? e.message
+          : "We couldn't complete your order. Please try again.",
+      );
     } finally {
       setSubmitting(false);
     }
@@ -58,26 +52,28 @@ export function CheckoutPage() {
     <main className="demo-page">
       <h1 className="page-title">Checkout</h1>
       <p className="page-subtitle">
-        Review your cart and verified identity, then complete the rental.
+        Review your rental and identity, then place your order.
       </p>
 
       {orderId ? (
         <section className="demo-card">
           <h2>Rental confirmed</h2>
-          <p>Your rental request was submitted successfully.</p>
-          <p>
-            Order reference: <strong>{orderId}</strong>
-          </p>
-          <div className="button-row">
-            <button type="button" onClick={beginNewOrder}>
-              New order
+          <div className="demo-banner demo-banner--success">
+            <p>We received your rental request.</p>
+            <p>
+              Confirmation number: <strong>{orderId}</strong>
+            </p>
+          </div>
+          <div className="button-row button-row--spaced">
+            <button type="button" onClick={restartFromHome}>
+              Start another rental
             </button>
           </div>
         </section>
       ) : (
         <>
           <section className="demo-card">
-            <h2>Cart</h2>
+            <h2>Your rental</h2>
             <ul className="checkout-lines">
               {cart.map((item) => (
                 <li key={item.droneId} className="checkout-line">
@@ -89,14 +85,21 @@ export function CheckoutPage() {
               ))}
             </ul>
             <p className="checkout-total">
-              Total {formatCurrency(getCartTotal(cart))}
+              Total due {formatCurrency(getCartTotal(cart))}
             </p>
           </section>
 
           <section className="demo-card demo-card--stack">
-            <h2>Verified identity</h2>
-            <p className="muted identity-summary">
-              Status: {verification.status} — score {verification.score}
+            <h2>Identity on file</h2>
+            <p
+              className={
+                verification.status === "verified"
+                  ? "identity-summary demo-text-success"
+                  : "identity-summary demo-text-error"
+              }
+            >
+              Verification: {verification.status} · Score:{" "}
+              {verification.score}
             </p>
             <p className="identity-phone">{verification.phone}</p>
             <p className="identity-address">
@@ -106,7 +109,7 @@ export function CheckoutPage() {
           </section>
 
           {error ? (
-            <p className="muted demo-alert" role="alert">
+            <p className="demo-banner demo-banner--error" role="alert">
               {error}
             </p>
           ) : null}
@@ -117,11 +120,12 @@ export function CheckoutPage() {
               disabled={submitting || cart.length === 0}
               onClick={completeRental}
             >
-              {submitting ? "Submitting…" : "Complete rental"}
+              {submitting ? "Placing order…" : "Place rental order"}
             </button>
           </div>
         </>
       )}
+      <RestartDemoFlow />
     </main>
   );
 }

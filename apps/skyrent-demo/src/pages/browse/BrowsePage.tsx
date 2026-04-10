@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./BrowsePage.css";
 import { INVENTORY, type Drone } from "../../domain/inventory";
 import { formatCurrency, getCartTotal } from "../../domain/pricing";
@@ -8,6 +8,7 @@ import { useCart } from "../../state/cart/cart.hooks";
 import { ROUTES } from "../../routing/routes";
 
 export function BrowsePage() {
+  const navigate = useNavigate();
   const { state: cart, dispatch: cartDispatch } = useCart();
   const [daysByDroneId, setDaysByDroneId] = useState<Record<string, number>>(
     {},
@@ -39,14 +40,18 @@ export function BrowsePage() {
     }));
   };
 
+  const canContinueToVerification = cart.length > 0;
+
   return (
-    <main className="demo-page">
+    <main className="demo-page browse-page">
       <h1 className="page-title">SkyRent Drone Rentals</h1>
       <p className="page-subtitle">
-        Browse inventory, select rental days, and build your cart.
+        Choose a drone, set how many days you need, then add it to your cart.
       </p>
-      <section className="demo-card">
-        <h2>Drone inventory</h2>
+      <div className="browse-layout">
+        <div className="browse-layout__inventory">
+          <section className="demo-card">
+        <h2>Available drones</h2>
         {(Object.keys(groupedInventory) as Array<Drone["category"]>).map(
           (category) => (
             <div key={category} className="category-block">
@@ -61,16 +66,16 @@ export function BrowsePage() {
                       {drone.category === "Cargo" &&
                       drone.loadCapacityKg !== undefined ? (
                         <p className="muted">
-                          Load capacity:
+                          Load capacity:{" "}
                           <strong>{drone.loadCapacityKg} kg</strong>
                         </p>
                       ) : null}
                       <div className="price-row">
-                        <span>Daily rate</span>
+                        <span>Rate (per day)</span>
                         <strong>{formatCurrency(drone.dailyRate)}</strong>
                       </div>
                       <div className="item-controls">
-                        <label htmlFor={`days-${drone.id}`}>Days</label>
+                        <label htmlFor={`days-${drone.id}`}>Rental days</label>
                         <input
                           id={`days-${drone.id}`}
                           type="number"
@@ -105,73 +110,101 @@ export function BrowsePage() {
             </div>
           ),
         )}
-      </section>
-      <section className="demo-card">
-        <h2>Cart summary</h2>
-        {cart.length === 0 ? (
-          <p className="muted">No drones selected yet.</p>
-        ) : (
-          <ul className="cart-list">
-            {cart.map((item) => (
-              <li key={item.droneId} className="cart-item">
-                <div>
-                  <strong>{item.name}</strong>
-                  <p className="muted">
-                    {item.days} day(s) @ {formatCurrency(item.dailyRate)}
-                  </p>
-                  <p className="muted">
-                    Line total:{" "}
-                    <strong>
-                      {formatCurrency(item.dailyRate * item.days)}
-                    </strong>
-                  </p>
-                </div>
-                <div className="cart-actions">
-                  <label htmlFor={`cart-days-${item.droneId}`}>Days</label>
-                  <input
-                    id={`cart-days-${item.droneId}`}
-                    type="number"
-                    min={1}
-                    max={30}
-                    value={item.days}
-                    onChange={(event) => {
-                      const raw = Number(event.target.value);
-                      const bounded = Number.isFinite(raw)
-                        ? Math.max(1, Math.min(30, raw))
-                        : 1;
-                      cartDispatch({
-                        type: CART_ACTIONS.UPDATE_DAYS,
-                        payload: { droneId: item.droneId, days: bounded },
-                      });
-                    }}
-                  />
-                  <div className="button-row">
-                    <button
-                      type="button"
-                      onClick={() =>
-                        cartDispatch({
-                          type: CART_ACTIONS.REMOVE,
-                          payload: { droneId: item.droneId },
-                        })
-                      }
-                    >
-                      Remove
-                    </button>
-                  </div>
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
-        <div className="result">
-          <strong>Total:</strong> {formatCurrency(cartTotal)}
+          </section>
         </div>
-        <div className="button-row button-row--spaced-sm">
-          {cart.length > 0 && (
-            <Link to={ROUTES.verification}>Continue to Verification</Link>
-          )}
-        </div>
-      </section>
+        <aside
+          className="browse-layout__cart"
+          aria-label={`Your cart, ${cart.length} ${cart.length === 1 ? "item" : "items"}`}
+        >
+          <section className="demo-card cart-panel">
+            <h2>
+              Your cart{" "}
+              <span className="muted">({cart.length})</span>
+            </h2>
+            {cart.length === 0 ? (
+              <p className="muted cart-panel__empty">
+                Your cart is empty. Pick a drone from the list to get started.
+              </p>
+            ) : (
+              <div className="cart-panel__scroll">
+                <ul className="cart-list">
+                  {cart.map((item) => (
+                    <li key={item.droneId} className="cart-item">
+                      <div>
+                        <strong>{item.name}</strong>
+                        <p className="muted">
+                          {item.days}{" "}
+                          {item.days === 1 ? "day" : "days"} at{" "}
+                          {formatCurrency(item.dailyRate)} / day
+                        </p>
+                        <p className="muted">
+                          Subtotal{" "}
+                          <strong>
+                            {formatCurrency(item.dailyRate * item.days)}
+                          </strong>
+                        </p>
+                      </div>
+                      <div className="cart-actions">
+                        <label htmlFor={`cart-days-${item.droneId}`}>
+                          Rental days
+                        </label>
+                        <input
+                          id={`cart-days-${item.droneId}`}
+                          type="number"
+                          min={1}
+                          max={30}
+                          value={item.days}
+                          onChange={(event) => {
+                            const raw = Number(event.target.value);
+                            const bounded = Number.isFinite(raw)
+                              ? Math.max(1, Math.min(30, raw))
+                              : 1;
+                            cartDispatch({
+                              type: CART_ACTIONS.UPDATE_DAYS,
+                              payload: { droneId: item.droneId, days: bounded },
+                            });
+                          }}
+                        />
+                        <div className="button-row">
+                          <button
+                            type="button"
+                            onClick={() =>
+                              cartDispatch({
+                                type: CART_ACTIONS.REMOVE,
+                                payload: { droneId: item.droneId },
+                              })
+                            }
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            <div className="result cart-panel__total">
+              <strong>Estimated total:</strong> {formatCurrency(cartTotal)}
+            </div>
+            <div className="button-row button-row--spaced-sm cart-panel__cta">
+              <button
+                type="button"
+                className="demo-route-link"
+                disabled={!canContinueToVerification}
+                title={
+                  canContinueToVerification
+                    ? undefined
+                    : "Add at least one drone to your cart to continue."
+                }
+                onClick={() => navigate(ROUTES.verification)}
+              >
+                Continue to verification
+              </button>
+            </div>
+          </section>
+        </aside>
+      </div>
     </main>
   );
 }

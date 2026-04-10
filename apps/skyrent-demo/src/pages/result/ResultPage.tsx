@@ -1,5 +1,6 @@
 import { Link, Navigate } from "react-router-dom";
 import "../browse/BrowsePage.css";
+import { RestartDemoFlow } from "../../components/RestartDemoFlow";
 import { ROUTES } from "../../routing/routes";
 import { useVerification } from "../../state/verification/verification.hooks";
 
@@ -31,9 +32,15 @@ export function ResultPage() {
 
   return (
     <main className="demo-page">
-      <h1 className="page-title">Verification result</h1>
-      <p className="page-subtitle">
-        Status: <strong>{status}</strong> — score: <strong>{score}</strong>
+      <h1 className="page-title">Your verification result</h1>
+      <p
+        className={
+          isVerified
+            ? "page-subtitle demo-text-success"
+            : "page-subtitle demo-text-error"
+        }
+      >
+        Status: <strong>{status}</strong> · Score: <strong>{score}</strong>
       </p>
 
       <section className="demo-card">
@@ -52,11 +59,11 @@ export function ResultPage() {
             </span>
           </p>
           <p>
-            <span className="muted">Selfie</span>
+            <span className="muted">Photo</span>
             <br />
             <img
               src={selfieUrl}
-              alt="Verification capture"
+              alt="Photo submitted for verification"
               style={{ maxWidth: "100%", maxHeight: 220, borderRadius: 8 }}
             />
           </p>
@@ -64,17 +71,28 @@ export function ResultPage() {
 
         {isVerified ? (
           <div className="button-row button-row--spaced">
-            <Link to={ROUTES.checkout}>Continue to checkout</Link>
+            <Link className="demo-route-link" to={ROUTES.checkout}>
+              Go to checkout
+            </Link>
           </div>
         ) : (
-          <div className="button-row button-row--spaced button-row--center">
-            <p className="muted result-fail-hint">
-              Verification did not pass. Adjust your details and try again.
+          <div className="result-fail-actions">
+            <p className="demo-banner demo-banner--error result-fail-hint">
+              We couldn&apos;t verify your identity with these details. Update
+              them and try again.
             </p>
-            <Link to={ROUTES.verification}>Run again</Link>
+            <div className="button-row">
+              <Link
+                className="demo-route-link demo-route-link--secondary"
+                to={ROUTES.verification}
+              >
+                Try again
+              </Link>
+            </div>
           </div>
         )}
       </section>
+      <RestartDemoFlow />
     </main>
   );
 }

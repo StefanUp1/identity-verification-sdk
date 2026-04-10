@@ -10,6 +10,7 @@ import {
   type IdentityInputs,
 } from "@identity-verification/sdk";
 import "../browse/BrowsePage.css";
+import { RestartDemoFlow } from "../../components/RestartDemoFlow";
 import { ROUTES } from "../../routing/routes";
 import { verifyIdentity } from "../../services/verifyIdentity";
 import { VERIFICATION_ACTIONS } from "../../state/verification/verification.types";
@@ -81,17 +82,17 @@ export function VerificationPage() {
 
   return (
     <main className="demo-page">
-      <h1 className="page-title">Identity verification</h1>
+      <h1 className="page-title">Verify your identity</h1>
       <p className="page-subtitle">
-        Step {step} of 3 — selfie, then phone, then address.
+        Step {step} of 3: photo, phone number, then address.
       </p>
 
       <section className="demo-card">
         {step === 1 ? (
           <>
-            <h2>Selfie</h2>
+            <h2>Photo</h2>
             <p className="muted">
-              Capture a photo. Continue when you have a valid capture.
+              Take a clear photo of your face. Continue when it looks good.
             </p>
             <SelfieCapture
               value={draft.selfieUrl}
@@ -104,8 +105,10 @@ export function VerificationPage() {
 
         {step === 2 ? (
           <>
-            <h2>Phone</h2>
-            <p className="muted">Enter a valid number</p>
+            <h2>Phone number</h2>
+            <p className="muted">
+              Enter a valid number in international format (E.164).
+            </p>
             <PhoneInput
               value={draft.phone}
               onChange={(phone) =>
@@ -118,7 +121,9 @@ export function VerificationPage() {
         {step === 3 ? (
           <>
             <h2>Address</h2>
-            <p className="muted">All fields are required.</p>
+            <p className="muted">
+              Fill in every field. We use this to match your rental details.
+            </p>
             <AddressForm
               value={draft.address}
               onChange={(address) =>
@@ -131,7 +136,7 @@ export function VerificationPage() {
         <div className="button-row button-row--spaced">
           {step > 1 ? (
             <button type="button" onClick={goBack}>
-              Back
+              Previous
             </button>
           ) : null}
           {step < 3 ? (
@@ -148,11 +153,12 @@ export function VerificationPage() {
               onClick={runVerification}
               disabled={!isFullDraftReady(draft)}
             >
-              Run verification
+              Submit for verification
             </button>
           )}
         </div>
       </section>
+      <RestartDemoFlow />
     </main>
   );
 }
