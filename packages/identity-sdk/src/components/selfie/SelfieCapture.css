@@ -1,0 +1,45 @@
+@import "../../styles/shared/form-controls.css";
+
+.identity-sdk-selfie {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 320px;
+}
+
+.identity-sdk-selfie-shell {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--idsdk-color-selfie-shell);
+}
+
+.identity-sdk-selfie-video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.identity-sdk-selfie-guide {
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  transform: translate(-50%, -50%);
+  width: 58%;
+  height: 62%;
+  max-width: 208px;
+  max-height: 256px;
+  border: 3px dashed var(--idsdk-color-selfie-guide);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.identity-sdk-selfie-image {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  border-radius: 8px;
+}

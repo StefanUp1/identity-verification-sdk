@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { IdentityAddress } from "../../types.js";
 import { validateAddress, type AddressErrors } from "./validateAddress";
+import "./AddressForm.css";
 
 export type AddressFormProps = {
   onChange: (address: IdentityAddress) => void;
@@ -15,6 +16,8 @@ export type AddressFormProps = {
   /** When false, the SDK does not track or show its own field errors. Default true. */
   showSdkErrors?: boolean;
   validateOnBlur?: boolean;
+  /** Optional class on the root element for host styling overrides. */
+  className?: string;
 };
 
 const EMPTY_ADDRESS: IdentityAddress = {
@@ -33,6 +36,7 @@ export function AddressForm({
   errors: hostErrors,
   showSdkErrors = true,
   validateOnBlur = true,
+  className,
 }: AddressFormProps) {
   const [internalAddress, setInternalAddress] = useState<IdentityAddress>({
     ...EMPTY_ADDRESS,
@@ -85,53 +89,85 @@ export function AddressForm({
   };
 
   return (
-    <div>
-      <label htmlFor="address-street">Street</label>
+    <div className={`identity-sdk identity-sdk--address ${className ?? ""}`.trim()}>
+      <div className="identity-sdk-field">
+        <label className="identity-sdk-label" htmlFor="address-street">
+          Street
+        </label>
       <input
+        className="identity-sdk-input"
         id="address-street"
         value={address.street}
         onChange={(event) => handleFieldChange("street", event.target.value)}
         onBlur={() => handleFieldBlur("street")}
       />
       {displayErrorForField("street") ? (
-        <p role="alert">{displayErrorForField("street")}</p>
+        <p className="identity-sdk-error" role="alert">
+          {displayErrorForField("street")}
+        </p>
       ) : null}
+      </div>
 
-      <label htmlFor="address-city">City</label>
+      <div className="identity-sdk-field">
+        <label className="identity-sdk-label" htmlFor="address-city">
+          City
+        </label>
       <input
+        className="identity-sdk-input"
         id="address-city"
         value={address.city}
         onChange={(event) => handleFieldChange("city", event.target.value)}
         onBlur={() => handleFieldBlur("city")}
       />
       {displayErrorForField("city") ? (
-        <p role="alert">{displayErrorForField("city")}</p>
+        <p className="identity-sdk-error" role="alert">
+          {displayErrorForField("city")}
+        </p>
       ) : null}
+      </div>
 
-      <label htmlFor="address-state">State</label>
+      <div className="identity-sdk-field">
+        <label className="identity-sdk-label" htmlFor="address-state">
+          State
+        </label>
       <input
+        className="identity-sdk-input"
         id="address-state"
         value={address.state}
         onChange={(event) => handleFieldChange("state", event.target.value)}
         onBlur={() => handleFieldBlur("state")}
       />
       {displayErrorForField("state") ? (
-        <p role="alert">{displayErrorForField("state")}</p>
+        <p className="identity-sdk-error" role="alert">
+          {displayErrorForField("state")}
+        </p>
       ) : null}
+      </div>
 
-      <label htmlFor="address-country">Country</label>
+      <div className="identity-sdk-field">
+        <label className="identity-sdk-label" htmlFor="address-country">
+          Country
+        </label>
       <input
+        className="identity-sdk-input"
         id="address-country"
         value={address.country}
         onChange={(event) => handleFieldChange("country", event.target.value)}
         onBlur={() => handleFieldBlur("country")}
       />
       {displayErrorForField("country") ? (
-        <p role="alert">{displayErrorForField("country")}</p>
+        <p className="identity-sdk-error" role="alert">
+          {displayErrorForField("country")}
+        </p>
       ) : null}
+      </div>
 
-      <label htmlFor="address-postal-code">Postal code</label>
+      <div className="identity-sdk-field">
+        <label className="identity-sdk-label" htmlFor="address-postal-code">
+          Postal code
+        </label>
       <input
+        className="identity-sdk-input"
         id="address-postal-code"
         value={address.postalCode}
         onChange={(event) =>
@@ -140,8 +176,11 @@ export function AddressForm({
         onBlur={() => handleFieldBlur("postalCode")}
       />
       {displayErrorForField("postalCode") ? (
-        <p role="alert">{displayErrorForField("postalCode")}</p>
+        <p className="identity-sdk-error" role="alert">
+          {displayErrorForField("postalCode")}
+        </p>
       ) : null}
+      </div>
     </div>
   );
 }

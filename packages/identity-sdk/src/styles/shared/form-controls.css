@@ -1,0 +1,90 @@
+.identity-sdk {
+  --idsdk-color-text: #111827;
+  --idsdk-color-surface: #ffffff;
+  --idsdk-color-surface-hover: #f3f4f6;
+  --idsdk-color-border: #d1d5db;
+  --idsdk-color-focus: #6366f1;
+  --idsdk-color-focus-ring: rgba(99, 102, 241, 0.18);
+  --idsdk-color-error: #b91c1c;
+  --idsdk-color-primary: #4f46e5;
+  --idsdk-color-primary-hover: #4338ca;
+  --idsdk-color-primary-text: #ffffff;
+  --idsdk-color-selfie-shell: #111827;
+  --idsdk-color-selfie-guide: rgba(255, 255, 255, 0.9);
+
+  font: inherit;
+  color: var(--idsdk-color-text);
+}
+
+.identity-sdk-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 0.75rem;
+}
+
+.identity-sdk-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.identity-sdk-input,
+.identity-sdk-select {
+  width: 100%;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--idsdk-color-border);
+  border-radius: 8px;
+  font: inherit;
+  color: inherit;
+  background: var(--idsdk-color-surface);
+}
+
+.identity-sdk-input:focus,
+.identity-sdk-select:focus {
+  outline: none;
+  border-color: var(--idsdk-color-focus);
+  box-shadow: 0 0 0 3px var(--idsdk-color-focus-ring);
+}
+
+.identity-sdk-error {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--idsdk-color-error);
+}
+
+.identity-sdk-button-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.identity-sdk-button {
+  padding: 0.5rem 0.9rem;
+  border: 1px solid var(--idsdk-color-border);
+  border-radius: 8px;
+  background: var(--idsdk-color-surface);
+  color: var(--idsdk-color-text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.identity-sdk-button:hover:not(:disabled) {
+  background: var(--idsdk-color-surface-hover);
+}
+
+.identity-sdk-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.identity-sdk-button-primary {
+  background: var(--idsdk-color-primary);
+  border-color: var(--idsdk-color-primary);
+  color: var(--idsdk-color-primary-text);
+}
+
+.identity-sdk-button-primary:hover:not(:disabled) {
+  background: var(--idsdk-color-primary-hover);
+  border-color: var(--idsdk-color-primary-hover);
+  color: var(--idsdk-color-primary-text);
+}

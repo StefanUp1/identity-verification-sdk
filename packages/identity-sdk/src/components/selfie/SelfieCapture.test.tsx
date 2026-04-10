@@ -64,6 +64,11 @@ describe("SelfieCapture", () => {
     expect(screen.getByLabelText("Camera preview")).toBeInTheDocument();
   });
 
+  it("applies custom root className", () => {
+    render(<SelfieCapture onChange={vi.fn()} className="host-selfie" />);
+    expect(document.querySelector(".host-selfie")).toBeInTheDocument();
+  });
+
   describe("capture", () => {
     beforeEach(() => {
       Object.defineProperty(HTMLVideoElement.prototype, "videoWidth", {

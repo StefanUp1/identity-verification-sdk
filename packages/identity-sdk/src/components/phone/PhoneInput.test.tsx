@@ -88,4 +88,9 @@ describe("PhoneInput", () => {
     fireEvent.change(phoneInput, { target: { value: "" } });
     expect(onChange).toHaveBeenLastCalledWith("");
   });
+
+  it("applies custom root className", () => {
+    render(<PhoneInput onChange={vi.fn()} className="host-phone" />);
+    expect(document.querySelector(".host-phone")).toBeInTheDocument();
+  });
 });

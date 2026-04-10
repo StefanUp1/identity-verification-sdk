@@ -60,4 +60,9 @@ describe("AddressForm", () => {
       postalCode: "11000",
     });
   });
+
+  it("applies custom root className", () => {
+    render(<AddressForm onChange={vi.fn()} className="host-address" />);
+    expect(document.querySelector(".host-address")).toBeInTheDocument();
+  });
 });

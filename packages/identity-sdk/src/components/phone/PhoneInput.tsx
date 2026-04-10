@@ -9,6 +9,7 @@ import {
   parseAndFormatToE164,
   SUPPORTED_PHONE_COUNTRIES,
 } from "./phoneNumberUtils";
+import "./PhoneInput.css";
 
 export type PhoneInputProps = {
   defaultCountry?: CountryCode;
@@ -25,6 +26,8 @@ export type PhoneInputProps = {
   /** When false, the SDK does not surface its own validation copy (pair with `error` from the host). Default true. */
   showSdkErrors?: boolean;
   validateOnBlur?: boolean;
+  /** Optional class on the root element for host styling overrides. */
+  className?: string;
 };
 
 function getStateFromE164(
@@ -56,6 +59,7 @@ export function PhoneInput({
   error: errorMessage,
   showSdkErrors = true,
   validateOnBlur = true,
+  className,
 }: PhoneInputProps) {
   const initialState = getStateFromE164(
     value ?? defaultValue ?? "",
@@ -107,9 +111,13 @@ export function PhoneInput({
     errorMessage !== undefined ? errorMessage : showSdkErrors ? sdkError : "";
 
   return (
-    <div>
-      <label htmlFor="country-select">Country</label>
+    <div className={`identity-sdk identity-sdk--phone ${className ?? ""}`.trim()}>
+      <div className="identity-sdk-field">
+        <label className="identity-sdk-label" htmlFor="country-select">
+          Country
+        </label>
       <select
+        className="identity-sdk-select"
         id="country-select"
         value={country}
         onChange={(event) => {
@@ -137,9 +145,14 @@ export function PhoneInput({
           </option>
         ))}
       </select>
+      </div>
 
-      <label htmlFor="national-input">Phone number</label>
+      <div className="identity-sdk-field">
+        <label className="identity-sdk-label" htmlFor="national-input">
+          Phone number
+        </label>
       <input
+        className="identity-sdk-input"
         id="national-input"
         type="tel"
         value={nationalNumber}
@@ -171,7 +184,12 @@ export function PhoneInput({
         placeholder="Enter your number"
       />
 
-      {displayError ? <p role="alert">{displayError}</p> : null}
+      {displayError ? (
+        <p className="identity-sdk-error" role="alert">
+          {displayError}
+        </p>
+      ) : null}
+      </div>
     </div>
   );
 }

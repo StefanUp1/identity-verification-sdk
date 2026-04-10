@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import "./SelfieCapture.css";
 
 export type SelfieCaptureProps = {
   /** Data URL (`data:image/jpeg;base64,...`) or raw base64 string for `IdentityInputs.selfieUrl`. */
@@ -12,6 +13,8 @@ export type SelfieCaptureProps = {
    */
   error?: string;
   disabled?: boolean;
+  /** Optional class on the root element for host styling overrides. */
+  className?: string;
 };
 
 function getCameraErrorMessage(error: unknown): string {
@@ -42,6 +45,7 @@ export function SelfieCapture({
   onBlur,
   error: errorMessage,
   disabled = false,
+  className,
 }: SelfieCaptureProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -181,8 +185,12 @@ export function SelfieCapture({
   const hasPreview = Boolean(previewUrl);
 
   return (
-    <div onBlur={onBlur}>
-      {displayError ? <p role="alert">{displayError}</p> : null}
+    <div className={`identity-sdk ${className ?? ""}`.trim()} onBlur={onBlur}>
+      {displayError ? (
+        <p className="identity-sdk-error" role="alert">
+          {displayError}
+        </p>
+      ) : null}
 
       {!hasPreview ? (
         <div>
@@ -190,6 +198,7 @@ export function SelfieCapture({
             // Idle state, camera not running
             <button
               type="button"
+              className="identity-sdk-button identity-sdk-button-primary"
               disabled={disabled || starting}
               onClick={startCamera}
             >
@@ -197,62 +206,33 @@ export function SelfieCapture({
             </button>
           ) : (
             // Camera stream active state
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "stretch",
-                gap: 8,
-                width: "100%",
-                maxWidth: 320,
-              }}
-            >
-              <div
-                style={{
-                  position: "relative",
-                  width: "100%",
-                  aspectRatio: "3 / 4",
-                  borderRadius: 8,
-                  overflow: "hidden",
-                  background: "#111",
-                }}
-              >
+            <div className="identity-sdk-selfie">
+              <div className="identity-sdk-selfie-shell">
                 <video
                   ref={videoRef}
                   muted
                   playsInline
                   autoPlay
                   aria-label="Camera preview"
-                  style={{
-                    display: "block",
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                  }}
+                  className="identity-sdk-selfie-video"
                 />
                 {/* Face guide layout */}
                 <div
                   data-testid="selfie-face-guide"
                   aria-hidden
-                  style={{
-                    position: "absolute",
-                    left: "50%",
-                    top: "45%",
-                    transform: "translate(-50%, -50%)",
-                    width: "58%",
-                    height: "62%",
-                    maxWidth: 208,
-                    maxHeight: 256,
-                    border: "3px dashed rgba(255,255,255,0.9)",
-                    borderRadius: "50%",
-                    boxSizing: "border-box",
-                    pointerEvents: "none",
-                  }}
+                  className="identity-sdk-selfie-guide"
                 />
               </div>
-              <button type="button" disabled={disabled} onClick={capturePhoto}>
-                Capture photo
-              </button>
+              <div className="identity-sdk-button-row">
+                <button
+                  type="button"
+                  className="identity-sdk-button identity-sdk-button-primary"
+                  disabled={disabled}
+                  onClick={capturePhoto}
+                >
+                  Capture photo
+                </button>
+              </div>
             </div>
           )}
         </div>
@@ -262,15 +242,15 @@ export function SelfieCapture({
           <img
             src={previewUrl}
             alt="Captured selfie preview"
-            style={{
-              display: "block",
-              maxWidth: 320,
-              width: "100%",
-              borderRadius: 8,
-            }}
+            className="identity-sdk-selfie-image"
           />
-          <div style={{ marginTop: 8 }}>
-            <button type="button" disabled={disabled} onClick={retake}>
+          <div className="identity-sdk-button-row">
+            <button
+              type="button"
+              className="identity-sdk-button identity-sdk-button-primary"
+              disabled={disabled}
+              onClick={retake}
+            >
               Retake photo
             </button>
           </div>
