@@ -47,7 +47,7 @@ export function ResultPage() {
           <p>
             <span className="muted">Address</span>
             <br />
-            <span style={{ whiteSpace: "pre-line" }}>
+            <span className="address-multiline">
               {formatAddressLines(address)}
             </span>
           </p>
@@ -62,18 +62,18 @@ export function ResultPage() {
           </p>
         </div>
 
-        <div className="button-row" style={{ marginTop: "1rem" }}>
-          {isVerified ? (
+        {isVerified ? (
+          <div className="button-row button-row--spaced">
             <Link to={ROUTES.checkout}>Continue to checkout</Link>
-          ) : (
-            <>
-              <p className="muted" style={{ margin: 0, alignSelf: "center" }}>
-                Verification did not pass. Adjust your details and try again.
-              </p>
-              <Link to={ROUTES.verification}>Run again</Link>
-            </>
-          )}
-        </div>
+          </div>
+        ) : (
+          <div className="button-row button-row--spaced button-row--center">
+            <p className="muted result-fail-hint">
+              Verification did not pass. Adjust your details and try again.
+            </p>
+            <Link to={ROUTES.verification}>Run again</Link>
+          </div>
+        )}
       </section>
     </main>
   );

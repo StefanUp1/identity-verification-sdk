@@ -78,17 +78,9 @@ export function CheckoutPage() {
         <>
           <section className="demo-card">
             <h2>Cart</h2>
-            <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+            <ul className="checkout-lines">
               {cart.map((item) => (
-                <li
-                  key={item.droneId}
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    padding: "0.5rem 0",
-                    borderBottom: "1px solid #e5e7eb",
-                  }}
-                >
+                <li key={item.droneId} className="checkout-line">
                   <span>
                     {item.name} × {item.days} days
                   </span>
@@ -96,30 +88,30 @@ export function CheckoutPage() {
                 </li>
               ))}
             </ul>
-            <p style={{ marginTop: "1rem", fontWeight: 600 }}>
+            <p className="checkout-total">
               Total {formatCurrency(getCartTotal(cart))}
             </p>
           </section>
 
-          <section className="demo-card" style={{ marginTop: "1rem" }}>
+          <section className="demo-card demo-card--stack">
             <h2>Verified identity</h2>
-            <p className="muted" style={{ margin: "0 0 0.5rem" }}>
+            <p className="muted identity-summary">
               Status: {verification.status} — score {verification.score}
             </p>
-            <p style={{ margin: 0 }}>{verification.phone}</p>
-            <p style={{ margin: "0.25rem 0 0" }}>
+            <p className="identity-phone">{verification.phone}</p>
+            <p className="identity-address">
               {verification.address.street}, {verification.address.city},{" "}
               {verification.address.state} {verification.address.postalCode}
             </p>
           </section>
 
           {error ? (
-            <p className="muted" role="alert" style={{ marginTop: "1rem" }}>
+            <p className="muted demo-alert" role="alert">
               {error}
             </p>
           ) : null}
 
-          <div className="button-row" style={{ marginTop: "1rem" }}>
+          <div className="button-row button-row--spaced">
             <button
               type="button"
               disabled={submitting || cart.length === 0}

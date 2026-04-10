@@ -128,7 +128,7 @@ export function VerificationPage() {
           </>
         ) : null}
 
-        <div className="button-row" style={{ marginTop: "1rem" }}>
+        <div className="button-row button-row--spaced">
           {step > 1 ? (
             <button type="button" onClick={goBack}>
               Back

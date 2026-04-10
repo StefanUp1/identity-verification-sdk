@@ -166,7 +166,7 @@ export function BrowsePage() {
         <div className="result">
           <strong>Total:</strong> {formatCurrency(cartTotal)}
         </div>
-        <div className="button-row" style={{ marginTop: 12 }}>
+        <div className="button-row button-row--spaced-sm">
           {cart.length > 0 && (
             <Link to={ROUTES.verification}>Continue to Verification</Link>
           )}

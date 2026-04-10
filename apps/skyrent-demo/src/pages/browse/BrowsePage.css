@@ -129,6 +129,78 @@ button:hover {
   flex-wrap: wrap;
 }
 
+.button-row--spaced {
+  margin-top: 1rem;
+}
+
+.button-row--spaced-sm {
+  margin-top: 0.75rem;
+}
+
+.button-row--center {
+  align-items: center;
+}
+
+.demo-card--stack {
+  margin-top: 1rem;
+}
+
+.checkout-lines {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.checkout-line {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.checkout-line:last-child {
+  border-bottom: none;
+}
+
+.checkout-total {
+  margin-top: 1rem;
+  font-weight: 600;
+}
+
+.identity-summary {
+  margin: 0 0 0.5rem;
+}
+
+.identity-phone {
+  margin: 0;
+}
+
+.identity-address {
+  margin: 0.25rem 0 0;
+  font-size: 0.9rem;
+}
+
+.demo-alert {
+  margin-top: 1rem;
+}
+
+.address-multiline {
+  white-space: pre-line;
+}
+
+.result-selfie-thumb {
+  display: block;
+  max-width: 100%;
+  max-height: 220px;
+  border-radius: 8px;
+}
+
+.result-fail-hint {
+  margin: 0;
+  align-self: center;
+}
+
 .state-preview {
   margin: 0.5rem 0 0;
   padding: 0.75rem;

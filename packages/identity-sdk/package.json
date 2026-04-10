@@ -20,7 +20,7 @@
     "build": "tsup src/index.ts --format esm,cjs --dts",
     "dev": "tsup src/index.ts --watch --format esm,cjs --dts",
     "test": "vitest run",
-    "lint": "echo \"No lint configured yet\""
+    "lint": "eslint ."
   },
   "dependencies": {
     "libphonenumber-js": "^1.12.41"
@@ -30,14 +30,19 @@
     "react-dom": "^18 || ^19"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.4",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
+    "eslint": "^9.39.4",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "globals": "^17.4.0",
     "jsdom": "^29.0.2",
     "tsup": "^8.0.0",
     "typescript": "^5.0.0",
+    "typescript-eslint": "^8.58.0",
     "vitest": "^2.0.0"
   }
 }
