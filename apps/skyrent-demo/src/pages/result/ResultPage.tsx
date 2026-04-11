@@ -1,5 +1,5 @@
 import { Link, Navigate } from "react-router-dom";
-import "../browse/BrowsePage.css";
+import "../../styles/demo-pages.css";
 import { RestartDemoFlow } from "../../components/RestartDemoFlow";
 import { ROUTES } from "../../routing/routes";
 import { useVerification } from "../../state/verification/verification.hooks";
@@ -96,3 +96,5 @@ export function ResultPage() {
     </main>
   );
 }
+
+export default ResultPage;

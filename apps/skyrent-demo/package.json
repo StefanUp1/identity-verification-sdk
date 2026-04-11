@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "predev": "pnpm --dir ../../packages/identity-sdk run build",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "test": "vitest run",

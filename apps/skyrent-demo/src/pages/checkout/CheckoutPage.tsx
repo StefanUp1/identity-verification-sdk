@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
-import "../browse/BrowsePage.css";
+import "../../styles/demo-pages.css";
 import { RestartDemoFlow } from "../../components/RestartDemoFlow";
 import { useRestartDemoFlow } from "../../hooks/useRestartDemoFlow";
 import {
@@ -129,3 +129,5 @@ export function CheckoutPage() {
     </main>
   );
 }
+
+export default CheckoutPage;

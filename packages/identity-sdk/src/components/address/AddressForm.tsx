@@ -89,97 +89,99 @@ export function AddressForm({
   };
 
   return (
-    <div className={`identity-sdk identity-sdk--address ${className ?? ""}`.trim()}>
+    <div
+      className={`identity-sdk identity-sdk--address ${className ?? ""}`.trim()}
+    >
       <div className="identity-sdk-field">
         <label className="identity-sdk-label" htmlFor="address-street">
           Street
         </label>
-      <input
-        className="identity-sdk-input"
-        id="address-street"
-        value={address.street}
-        onChange={(event) => handleFieldChange("street", event.target.value)}
-        onBlur={() => handleFieldBlur("street")}
-      />
-      {displayErrorForField("street") ? (
-        <p className="identity-sdk-error" role="alert">
-          {displayErrorForField("street")}
-        </p>
-      ) : null}
+        <input
+          className="identity-sdk-input"
+          id="address-street"
+          value={address.street}
+          onChange={(event) => handleFieldChange("street", event.target.value)}
+          onBlur={() => handleFieldBlur("street")}
+        />
+        {displayErrorForField("street") ? (
+          <p className="identity-sdk-error" role="alert">
+            {displayErrorForField("street")}
+          </p>
+        ) : null}
       </div>
 
       <div className="identity-sdk-field">
         <label className="identity-sdk-label" htmlFor="address-city">
           City
         </label>
-      <input
-        className="identity-sdk-input"
-        id="address-city"
-        value={address.city}
-        onChange={(event) => handleFieldChange("city", event.target.value)}
-        onBlur={() => handleFieldBlur("city")}
-      />
-      {displayErrorForField("city") ? (
-        <p className="identity-sdk-error" role="alert">
-          {displayErrorForField("city")}
-        </p>
-      ) : null}
+        <input
+          className="identity-sdk-input"
+          id="address-city"
+          value={address.city}
+          onChange={(event) => handleFieldChange("city", event.target.value)}
+          onBlur={() => handleFieldBlur("city")}
+        />
+        {displayErrorForField("city") ? (
+          <p className="identity-sdk-error" role="alert">
+            {displayErrorForField("city")}
+          </p>
+        ) : null}
       </div>
 
       <div className="identity-sdk-field">
         <label className="identity-sdk-label" htmlFor="address-state">
           State
         </label>
-      <input
-        className="identity-sdk-input"
-        id="address-state"
-        value={address.state}
-        onChange={(event) => handleFieldChange("state", event.target.value)}
-        onBlur={() => handleFieldBlur("state")}
-      />
-      {displayErrorForField("state") ? (
-        <p className="identity-sdk-error" role="alert">
-          {displayErrorForField("state")}
-        </p>
-      ) : null}
+        <input
+          className="identity-sdk-input"
+          id="address-state"
+          value={address.state}
+          onChange={(event) => handleFieldChange("state", event.target.value)}
+          onBlur={() => handleFieldBlur("state")}
+        />
+        {displayErrorForField("state") ? (
+          <p className="identity-sdk-error" role="alert">
+            {displayErrorForField("state")}
+          </p>
+        ) : null}
       </div>
 
       <div className="identity-sdk-field">
         <label className="identity-sdk-label" htmlFor="address-country">
           Country
         </label>
-      <input
-        className="identity-sdk-input"
-        id="address-country"
-        value={address.country}
-        onChange={(event) => handleFieldChange("country", event.target.value)}
-        onBlur={() => handleFieldBlur("country")}
-      />
-      {displayErrorForField("country") ? (
-        <p className="identity-sdk-error" role="alert">
-          {displayErrorForField("country")}
-        </p>
-      ) : null}
+        <input
+          className="identity-sdk-input"
+          id="address-country"
+          value={address.country}
+          onChange={(event) => handleFieldChange("country", event.target.value)}
+          onBlur={() => handleFieldBlur("country")}
+        />
+        {displayErrorForField("country") ? (
+          <p className="identity-sdk-error" role="alert">
+            {displayErrorForField("country")}
+          </p>
+        ) : null}
       </div>
 
       <div className="identity-sdk-field">
         <label className="identity-sdk-label" htmlFor="address-postal-code">
           Postal code
         </label>
-      <input
-        className="identity-sdk-input"
-        id="address-postal-code"
-        value={address.postalCode}
-        onChange={(event) =>
-          handleFieldChange("postalCode", event.target.value)
-        }
-        onBlur={() => handleFieldBlur("postalCode")}
-      />
-      {displayErrorForField("postalCode") ? (
-        <p className="identity-sdk-error" role="alert">
-          {displayErrorForField("postalCode")}
-        </p>
-      ) : null}
+        <input
+          className="identity-sdk-input"
+          id="address-postal-code"
+          value={address.postalCode}
+          onChange={(event) =>
+            handleFieldChange("postalCode", event.target.value)
+          }
+          onBlur={() => handleFieldBlur("postalCode")}
+        />
+        {displayErrorForField("postalCode") ? (
+          <p className="identity-sdk-error" role="alert">
+            {displayErrorForField("postalCode")}
+          </p>
+        ) : null}
       </div>
     </div>
   );

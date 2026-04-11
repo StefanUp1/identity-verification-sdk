@@ -9,7 +9,7 @@ import {
   type IdentityAddress,
   type IdentityInputs,
 } from "@identity-verification/sdk";
-import "../browse/BrowsePage.css";
+import "../../styles/demo-pages.css";
 import { RestartDemoFlow } from "../../components/RestartDemoFlow";
 import { ROUTES } from "../../routing/routes";
 import { verifyIdentity } from "../../services/verifyIdentity";
@@ -162,3 +162,5 @@ export function VerificationPage() {
     </main>
   );
 }
+
+export default VerificationPage;

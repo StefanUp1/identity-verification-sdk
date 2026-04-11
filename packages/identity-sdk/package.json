@@ -3,15 +3,21 @@
   "version": "0.0.1",
   "private": false,
   "type": "module",
-  "main": "dist/index.cjs",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./src/index.ts",
-      "import": "./src/index.ts",
-      "default": "./src/index.ts"
-    }
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./style.css": "./dist/index.css"
   },
   "files": [
     "dist"
@@ -20,7 +26,8 @@
     "build": "tsup src/index.ts --format esm,cjs --dts",
     "dev": "tsup src/index.ts --watch --format esm,cjs --dts",
     "test": "vitest run",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "prepack": "pnpm run build"
   },
   "dependencies": {
     "libphonenumber-js": "^1.12.41"
