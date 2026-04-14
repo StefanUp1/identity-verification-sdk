@@ -1,73 +1,53 @@
-# React + TypeScript + Vite
+# SkyRent demo
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React + Vite host application that demonstrates integrating **`@identity-verification/sdk`** in a realistic checkout-style flow (browse, verification, checkout, result).
 
-Currently, two official plugins are available:
+This package is part of the [Identity Verification SDK monorepo](../../README.md). Install dependencies from the **repository root** unless you already have a linked workspace install.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Prerequisites
 
-## React Compiler
+Same as the monorepo: Node.js (LTS recommended) and **pnpm 10.x**. See the [root README](../../README.md).
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Install
 
-## Expanding the ESLint configuration
+From the monorepo root:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+pnpm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Run the dev server
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+**Recommended** (from monorepo root, uses the root `dev` script):
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+pnpm dev
 ```
+
+**From this app directory** (`apps/skyrent-demo`):
+
+```bash
+pnpm dev
+```
+
+Before Vite starts, the `predev` script builds `packages/identity-sdk` once so the workspace dependency resolves to built `dist/` output. The demo imports SDK styles in `src/main.tsx`:
+
+```ts
+import "@identity-verification/sdk/style.css";
+```
+
+Open the URL Vite prints (default [http://localhost:5173](http://localhost:5173)).
+
+## Scripts
+
+| Script         | Description                                 |
+| -------------- | ------------------------------------------- |
+| `pnpm dev`     | Build SDK (predev) then start Vite with HMR |
+| `pnpm build`   | Typecheck and production build              |
+| `pnpm preview` | Serve the production build locally          |
+| `pnpm test`    | Run Vitest                                  |
+| `pnpm lint`    | Run ESLint                                  |
+
+## Related
+
+- [Identity Verification SDK package](../../packages/identity-sdk/README.md)
