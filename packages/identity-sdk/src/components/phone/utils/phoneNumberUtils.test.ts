@@ -4,7 +4,7 @@ import {
   getCountryDialCode,
   isValidPhoneE164,
   parseAndFormatToE164,
-} from "./utils/phoneNumberUtils";
+} from "./phoneNumberUtils";
 
 describe("phone number utils", () => {
   it("formats and normalizes a Serbia number to E.164", () => {

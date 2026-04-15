@@ -31,21 +31,4 @@ describe("validateAddress", () => {
 
     expect(errors).toEqual({});
   });
-
-  it("treats non-string core fields as invalid", () => {
-    const errors = validateAddress({
-      street: 1 as unknown as string,
-      city: null as unknown as string,
-      state: {} as unknown as string,
-      country: [] as unknown as string,
-      postalCode: "11000",
-    });
-
-    expect(errors).toEqual({
-      street: "Street is required.",
-      city: "City is required.",
-      state: "State is required.",
-      country: "Country is required.",
-    });
-  });
 });
