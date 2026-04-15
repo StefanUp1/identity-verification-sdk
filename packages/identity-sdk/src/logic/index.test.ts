@@ -3,7 +3,7 @@ import {
   computeWeightedScore,
   getIdentityData,
   scoreToStatus,
-} from "./index.js";
+} from "../index.js";
 
 const sampleInputs = {
   selfieUrl: "data:image/jpeg;base64,abc",

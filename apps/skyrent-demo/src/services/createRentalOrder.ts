@@ -21,8 +21,9 @@ export async function createRentalOrder(
     throw new Error("Your cart is empty. Add a drone before placing an order.");
   }
   await new Promise((resolve) => setTimeout(resolve, 250));
+
   return {
-    orderId: `rent-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`,
+    orderId: `rent-${Date.now().toString()}-${Math.random().toString()}`,
     confirmedAt: new Date().toISOString(),
   };
 }

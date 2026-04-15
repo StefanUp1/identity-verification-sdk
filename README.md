@@ -4,10 +4,10 @@ Monorepo containing the `@identity-verification/sdk` package and a **SkyRent** d
 
 ## Repository layout
 
-| Path | Description |
-| ---- | ----------- |
+| Path                                                       | Description                                          |
+| ---------------------------------------------------------- | ---------------------------------------------------- |
 | [`packages/identity-sdk`](packages/identity-sdk/README.md) | Publishable React SDK (`@identity-verification/sdk`) |
-| [`apps/skyrent-demo`](apps/skyrent-demo/README.md) | Vite + React demo that consumes the SDK |
+| [`apps/skyrent-demo`](apps/skyrent-demo/README.md)         | Vite + React demo that consumes the SDK              |
 
 ## Prerequisites
 
@@ -26,28 +26,42 @@ From the repository root:
 pnpm install
 ```
 
-## Run the demo app
+## Development
 
 From the repository root:
+
+| Script         | Description                                                                                                                  |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `pnpm dev`     | **skyrent-demo** — Vite dev server. The demo’s `predev` builds the SDK once before Vite starts.                              |
+| `pnpm dev:sdk` | **identity-sdk** — `tsup` watch rebuild of `@identity-verification/sdk` (use alongside `dev` when you change the SDK often). |
+
+**Demo only:**
 
 ```bash
 pnpm dev
 ```
 
-This starts the **skyrent-demo** Vite dev server. The demo’s `predev` script builds the SDK once before Vite starts, so the workspace package is ready to import.
-
 When the server is up, open the URL shown in the terminal (by default Vite uses [http://localhost:5173](http://localhost:5173)).
 
-### Run only the demo package
+**SDK watch in a second terminal** (optional, while editing `packages/identity-sdk`):
+
+```bash
+pnpm dev:sdk
+```
+
+After each rebuild, refresh the host app if hot reload does not pick up changes.
+
+Equivalent filters (if you prefer not to use the root scripts):
 
 ```bash
 pnpm --filter skyrent-demo dev
+pnpm --filter @identity-verification/sdk dev
 ```
 
 ## Other useful commands
 
-| Command       | Description                                      |
-| ------------- | ------------------------------------------------ |
-| `pnpm build`  | Build all packages (`pnpm -r build`)             |
-| `pnpm test`   | Run tests in all packages                        |
-| `pnpm lint`   | Run ESLint in all packages                       |
+| Command      | Description                          |
+| ------------ | ------------------------------------ |
+| `pnpm build` | Build all packages (`pnpm -r build`) |
+| `pnpm test`  | Run tests in all packages            |
+| `pnpm lint`  | Run ESLint in all packages           |

@@ -1,3 +1,4 @@
+// For app config (React)
 {
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",

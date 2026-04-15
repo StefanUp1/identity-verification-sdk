@@ -16,8 +16,8 @@ function formatAddressLines(address: {
     `${address.city}, ${address.state} ${address.postalCode}`,
     address.country,
   ]
-    .filter(Boolean)
-    .join("\n");
+    .filter(Boolean) // filter out empty strings
+    .join("\n"); // join with newline
 }
 
 export function ResultPage() {

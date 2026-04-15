@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   parsePhoneNumberFromString,
   type CountryCode,
@@ -8,7 +8,7 @@ import {
   getCountryDialCode,
   parseAndFormatToE164,
   SUPPORTED_PHONE_COUNTRIES,
-} from "./phoneNumberUtils";
+} from "./utils/phoneNumberUtils";
 import "./PhoneInput.css";
 
 export type PhoneInputProps = {
@@ -30,11 +30,17 @@ export type PhoneInputProps = {
   className?: string;
 };
 
-function getStateFromE164(
-  phoneE164: string,
+/**
+ * Get the country and national number (needed for UI state in components) from a phone number string (E.164 from the host)
+ * @param phoneNumber - The phone number to parse.
+ * @param fallbackCountry - The fallback country to use if the phone number is not valid.
+ * @returns The country and national number.
+ */
+function getStateFromPhoneNumber(
+  phoneNumber: string,
   fallbackCountry: CountryCode,
 ): { country: CountryCode; nationalNumber: string } {
-  const parsed = parsePhoneNumberFromString(phoneE164);
+  const parsed = parsePhoneNumberFromString(phoneNumber);
   const parsedCountry = parsed?.country;
 
   if (parsedCountry && SUPPORTED_PHONE_COUNTRIES.includes(parsedCountry)) {
@@ -50,6 +56,11 @@ function getStateFromE164(
   };
 }
 
+const countryOptions = SUPPORTED_PHONE_COUNTRIES.map((c) => ({
+  code: c,
+  label: `${c} (${getCountryDialCode(c)})`,
+}));
+
 export function PhoneInput({
   defaultCountry = "RS",
   defaultValue,
@@ -61,7 +72,7 @@ export function PhoneInput({
   validateOnBlur = true,
   className,
 }: PhoneInputProps) {
-  const initialState = getStateFromE164(
+  const initialState = getStateFromPhoneNumber(
     value ?? defaultValue ?? "",
     defaultCountry,
   );
@@ -70,15 +81,6 @@ export function PhoneInput({
     initialState.nationalNumber,
   );
   const [sdkError, setSdkError] = useState("");
-
-  const countryOptions = useMemo(
-    () =>
-      SUPPORTED_PHONE_COUNTRIES.map((c) => ({
-        code: c,
-        label: `${c} (${getCountryDialCode(c)})`,
-      })),
-    [],
-  );
 
   const validateAndEmit = (value: string, selectedCountry: CountryCode) => {
     const normalized = parseAndFormatToE164(value, selectedCountry);
@@ -99,7 +101,7 @@ export function PhoneInput({
       return;
     }
 
-    const nextState = getStateFromE164(value, defaultCountry);
+    const nextState = getStateFromPhoneNumber(value, defaultCountry);
     setCountry(nextState.country);
     setNationalNumber(nextState.nationalNumber);
     if (showSdkErrors) {
@@ -111,84 +113,83 @@ export function PhoneInput({
     errorMessage !== undefined ? errorMessage : showSdkErrors ? sdkError : "";
 
   return (
-    <div className={`identity-sdk identity-sdk--phone ${className ?? ""}`.trim()}>
+    <div className={`identity-sdk identity-sdk--phone ${className ?? ""}`}>
       <div className="identity-sdk-field">
         <label className="identity-sdk-label" htmlFor="country-select">
           Country
         </label>
-      <select
-        className="identity-sdk-select"
-        id="country-select"
-        value={country}
-        onChange={(event) => {
-          const nextCountry = event.target.value as CountryCode;
-          setCountry(nextCountry);
-          const nextNational = formatPhoneNumberAsYouType(
-            nationalNumber,
-            nextCountry,
-          );
-          setNationalNumber(nextNational);
-
-          if (nextNational) {
-            validateAndEmit(nextNational, nextCountry);
-          } else {
-            if (showSdkErrors) {
-              setSdkError("");
+        <select
+          className="identity-sdk-select"
+          id="country-select"
+          value={country}
+          onChange={(event) => {
+            const nextCountry = event.target.value as CountryCode;
+            setCountry(nextCountry);
+            const nextNational = formatPhoneNumberAsYouType(
+              nationalNumber,
+              nextCountry,
+            );
+            setNationalNumber(nextNational);
+            if (nextNational) {
+              validateAndEmit(nextNational, nextCountry);
+            } else {
+              if (showSdkErrors) {
+                setSdkError("");
+              }
+              onChange("");
             }
-            onChange("");
-          }
-        }}
-      >
-        {countryOptions.map((option) => (
-          <option key={option.code} value={option.code}>
-            {option.label}
-          </option>
-        ))}
-      </select>
+          }}
+        >
+          {countryOptions.map((option) => (
+            <option key={option.code} value={option.code}>
+              {option.label}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div className="identity-sdk-field">
         <label className="identity-sdk-label" htmlFor="national-input">
           Phone number
         </label>
-      <input
-        className="identity-sdk-input"
-        id="national-input"
-        type="tel"
-        value={nationalNumber}
-        onChange={(event) => {
-          const nextNational = formatPhoneNumberAsYouType(
-            event.target.value,
-            country,
-          );
-          setNationalNumber(nextNational);
-          if (!nextNational) {
-            if (showSdkErrors) {
-              setSdkError("");
+        <input
+          className="identity-sdk-input"
+          id="national-input"
+          type="tel"
+          value={nationalNumber}
+          onChange={(event) => {
+            const nextNational = formatPhoneNumberAsYouType(
+              event.target.value,
+              country,
+            );
+            setNationalNumber(nextNational);
+            if (!nextNational) {
+              if (showSdkErrors) {
+                setSdkError("");
+              }
+              onChange("");
+              return;
             }
-            onChange("");
-            return;
-          }
-          validateAndEmit(nextNational, country);
-        }}
-        onBlur={() => {
-          if (validateOnBlur && showSdkErrors) {
-            if (!nationalNumber) {
-              setSdkError("Phone number is required.");
-            } else {
-              validateAndEmit(nationalNumber, country);
+            validateAndEmit(nextNational, country);
+          }}
+          onBlur={() => {
+            if (validateOnBlur && showSdkErrors) {
+              if (!nationalNumber) {
+                setSdkError("Phone number is required.");
+              } else {
+                validateAndEmit(nationalNumber, country);
+              }
             }
-          }
-          onBlur?.();
-        }}
-        placeholder="Enter your number"
-      />
+            onBlur?.();
+          }}
+          placeholder="Enter your number"
+        />
 
-      {displayError ? (
-        <p className="identity-sdk-error" role="alert">
-          {displayError}
-        </p>
-      ) : null}
+        {displayError ? (
+          <p className="identity-sdk-error" role="alert">
+            {displayError}
+          </p>
+        ) : null}
       </div>
     </div>
   );

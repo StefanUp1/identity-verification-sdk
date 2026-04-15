@@ -51,6 +51,5 @@ body,
   min-height: 40vh;
   padding: 1.5rem;
   color: var(--demo-color-text-muted);
-  font: 0.95rem/1.4 system-ui, sans-serif;
   user-select: none;
 }

@@ -18,7 +18,7 @@ pnpm install
 
 ## Run the dev server
 
-**Recommended** (from monorepo root, uses the root `dev` script):
+**Recommended** (from monorepo root — `pnpm dev`):
 
 ```bash
 pnpm dev

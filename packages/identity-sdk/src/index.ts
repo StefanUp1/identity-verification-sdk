@@ -10,7 +10,7 @@ export { computeWeightedScore, scoreToStatus } from "./logic/weightedScore.js";
 export {
   validateAddress,
   type AddressErrors,
-} from "./components/address/validateAddress.js";
+} from "./components/address/utils/validateAddress.js";
 export {
   AddressForm,
   type AddressFormProps,
@@ -19,7 +19,7 @@ export {
   PhoneInput,
   type PhoneInputProps,
 } from "./components/phone/PhoneInput.js";
-export { isValidPhoneE164 } from "./components/phone/phoneNumberUtils.js";
+export { isValidPhoneE164 } from "./components/phone/utils/phoneNumberUtils.js";
 export {
   SelfieCapture,
   type SelfieCaptureProps,

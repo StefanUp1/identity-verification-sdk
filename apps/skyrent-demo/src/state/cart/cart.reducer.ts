@@ -11,6 +11,7 @@ export function cartReducer(state: CartState, action: CartAction): CartState {
     case CART_ACTIONS.ADD: {
       const { drone, days } = action.payload;
       const existing = state.find((item) => item.droneId === drone.id);
+
       if (existing) {
         return state.map((item) =>
           item.droneId === drone.id
@@ -33,12 +34,13 @@ export function cartReducer(state: CartState, action: CartAction): CartState {
         },
       ];
     }
-    case CART_ACTIONS.UPDATE_DAYS:
+    case CART_ACTIONS.UPDATE_DAYS: {
+      const { droneId, days } = action.payload;
+
       return state.map((item) =>
-        item.droneId === action.payload.droneId
-          ? { ...item, days: clampDays(action.payload.days) }
-          : item,
+        item.droneId === droneId ? { ...item, days: clampDays(days) } : item,
       );
+    }
     case CART_ACTIONS.REMOVE:
       return state.filter((item) => item.droneId !== action.payload.droneId);
     case CART_ACTIONS.CLEAR:

@@ -18,7 +18,7 @@ export default defineConfig([
       globals: globals.browser,
     },
     rules: {
-      // Controlled components legitimately sync local state when `value` changes; refactoring would be API churn.
+      // Controlled components legitimately sync local state when `value` changes.
       "react-hooks/set-state-in-effect": "off",
     },
   },

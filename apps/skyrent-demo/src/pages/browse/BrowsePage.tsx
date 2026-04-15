@@ -40,6 +40,12 @@ export function BrowsePage() {
       [droneId]: days,
     }));
   };
+  const normalizeRentalDays = (raw: number): number => {
+    if (!Number.isFinite(raw)) {
+      return 1;
+    }
+    return Math.max(1, Math.min(30, Math.trunc(raw)));
+  };
 
   const canContinueToVerification = cart.length > 0;
 
@@ -84,12 +90,11 @@ export function BrowsePage() {
                               type="number"
                               min={1}
                               max={30}
+                              step={1}
                               value={selectedDays}
                               onChange={(event) => {
                                 const raw = Number(event.target.value);
-                                const bounded = Number.isFinite(raw)
-                                  ? Math.max(1, Math.min(30, raw))
-                                  : 1;
+                                const bounded = normalizeRentalDays(raw);
                                 setDaysForDrone(drone.id, bounded);
                               }}
                             />
@@ -154,12 +159,11 @@ export function BrowsePage() {
                           type="number"
                           min={1}
                           max={30}
+                          step={1}
                           value={item.days}
                           onChange={(event) => {
                             const raw = Number(event.target.value);
-                            const bounded = Number.isFinite(raw)
-                              ? Math.max(1, Math.min(30, raw))
-                              : 1;
+                            const bounded = normalizeRentalDays(raw);
                             cartDispatch({
                               type: CART_ACTIONS.UPDATE_DAYS,
                               payload: { droneId: item.droneId, days: bounded },

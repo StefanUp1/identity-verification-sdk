@@ -1,6 +1,9 @@
 import { useState } from "react";
 import type { IdentityAddress } from "../../types.js";
-import { validateAddress, type AddressErrors } from "./validateAddress";
+import {
+  validateAddress,
+  type AddressErrors,
+} from "./utils/validateAddress.js";
 import "./AddressForm.css";
 
 export type AddressFormProps = {
@@ -74,7 +77,7 @@ export function AddressForm({
     }
     setSdkErrors((current) => {
       if (!current[key]) {
-        return current;
+        return current; // if the key is not in the current errors, return the current errors, skip useless re-render
       }
       return { ...current, [key]: undefined };
     });
@@ -89,9 +92,7 @@ export function AddressForm({
   };
 
   return (
-    <div
-      className={`identity-sdk identity-sdk--address ${className ?? ""}`.trim()}
-    >
+    <div className={`identity-sdk identity-sdk--address ${className ?? ""}`}>
       <div className="identity-sdk-field">
         <label className="identity-sdk-label" htmlFor="address-street">
           Street

@@ -43,10 +43,16 @@ Package `exports` point at **built files in `dist/`**, not TypeScript under `src
 
 - **SkyRent demo** runs `predev` before Vite, so `pnpm dev` there usually builds the SDK for you on a fresh clone.
 
-- **While editing the SDK often**, keep a watch build running in a second terminal:
+- **While editing the SDK often**, keep a watch build running in a second terminal. From the **monorepo root**:
 
   ```bash
-  pnpm --dir packages/identity-sdk dev
+  pnpm dev:sdk
+  ```
+
+  Or, with your shell **inside `packages/identity-sdk`**:
+
+  ```bash
+  pnpm dev
   ```
 
   After each rebuild, refresh the host app if hot reload does not pick up changes.

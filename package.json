@@ -4,6 +4,7 @@
   "packageManager": "pnpm@10.0.0",
   "scripts": {
     "dev": "pnpm --filter skyrent-demo dev",
+    "dev:sdk": "pnpm --filter @identity-verification/sdk dev",
     "build": "pnpm -r build",
     "test": "pnpm -r test",
     "lint": "pnpm -r lint"

@@ -28,11 +28,11 @@ export function CheckoutPage() {
     setError(null);
     setSubmitting(true);
     try {
-      const { orderId: id } = await createRentalOrder({
+      const { orderId } = await createRentalOrder({
         cart,
         identity: verification,
       });
-      setOrderId(id);
+      setOrderId(orderId);
     } catch (e) {
       setError(
         e instanceof Error
@@ -98,8 +98,7 @@ export function CheckoutPage() {
                   : "identity-summary demo-text-error"
               }
             >
-              Verification: {verification.status} · Score:{" "}
-              {verification.score}
+              Verification: {verification.status} · Score: {verification.score}
             </p>
             <p className="identity-phone">{verification.phone}</p>
             <p className="identity-address">

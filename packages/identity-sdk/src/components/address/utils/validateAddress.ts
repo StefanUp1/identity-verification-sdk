@@ -1,4 +1,4 @@
-import type { IdentityAddress } from "../../types.js";
+import type { IdentityAddress } from "../../../types.js";
 
 export type AddressErrors = Partial<Record<keyof IdentityAddress, string>>;
 
