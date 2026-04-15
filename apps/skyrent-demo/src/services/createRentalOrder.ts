@@ -23,7 +23,7 @@ export async function createRentalOrder(
   await new Promise((resolve) => setTimeout(resolve, 250));
 
   return {
-    orderId: `rent-${Date.now().toString()}-${Math.random().toString()}`,
+    orderId: `rent-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`,
     confirmedAt: new Date().toISOString(),
   };
 }
