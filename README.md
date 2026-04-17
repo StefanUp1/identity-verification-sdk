@@ -1,13 +1,14 @@
 # Identity Verification SDK
 
-Monorepo containing the `@identity-verification/sdk` package and a **SkyRent** demo app that exercises it.
+Monorepo containing the `@identity-verification/sdk` package and **SkyRent** demo apps that exercise it.
 
 ## Repository layout
 
 | Path                                                       | Description                                          |
 | ---------------------------------------------------------- | ---------------------------------------------------- |
-| [`packages/identity-sdk`](packages/identity-sdk/README.md) | Publishable React SDK (`@identity-verification/sdk`) |
-| [`apps/skyrent-demo`](apps/skyrent-demo/README.md)         | Vite + React demo that consumes the SDK              |
+| [`packages/identity-sdk`](packages/identity-sdk/README.md) | Publishable React SDK (`@identity-verification/sdk`)             |
+| [`apps/skyrent-demo`](apps/skyrent-demo/README.md)         | Vite + React demo that consumes React SDK components             |
+| `apps/skyrent-demo-vue`                                    | Vite + Vue demo that consumes SDK Web Components (`idsdk-*`) |
 
 ## Prerequisites
 
@@ -30,15 +31,18 @@ pnpm install
 
 From the repository root:
 
-| Script         | Description                                                                                                                  |
-| -------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| `pnpm dev`     | **skyrent-demo** — Vite dev server. The demo’s `predev` builds the SDK once before Vite starts.                              |
-| `pnpm dev:sdk` | **identity-sdk** — `tsup` watch rebuild of `@identity-verification/sdk` (use alongside `dev` when you change the SDK often). |
+| Script         | Description                                                                                                                    |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `pnpm dev`     | **skyrent-demo** (React) — Vite dev server. The demo’s `predev` builds the SDK once before Vite starts.                     |
+| `pnpm dev:react` | Same as `pnpm dev` (React demo).                                                                                           |
+| `pnpm dev:vue` | **skyrent-demo-vue** — Vue demo using `@identity-verification/sdk/web-components`.                                            |
+| `pnpm dev:sdk` | **identity-sdk** — `tsup` watch rebuild of `@identity-verification/sdk` (use alongside demo dev when you change the SDK often). |
 
 **Demo only:**
 
 ```bash
 pnpm dev
+pnpm dev:vue
 ```
 
 When the server is up, open the URL shown in the terminal (by default Vite uses [http://localhost:5173](http://localhost:5173)).
@@ -55,6 +59,7 @@ Equivalent filters (if you prefer not to use the root scripts):
 
 ```bash
 pnpm --filter skyrent-demo dev
+pnpm --filter skyrent-demo-vue dev
 pnpm --filter @identity-verification/sdk dev
 ```
 

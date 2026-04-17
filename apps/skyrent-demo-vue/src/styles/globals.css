@@ -1,0 +1,45 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --demo-color-white: #fff;
+  --demo-color-bg-page: #f3f4f6;
+  --demo-color-bg-subtle: #f9fafb;
+  --demo-color-bg-disabled: #e5e7eb;
+
+  --demo-color-text: #111827;
+  --demo-color-text-muted: #4b5563;
+  --demo-color-text-subtle: #6b7280;
+  --demo-color-text-subtle-hover: #374151;
+  --demo-color-text-disabled: #9ca3af;
+
+  --demo-color-border: #e5e7eb;
+  --demo-color-border-input: #d1d5db;
+  --demo-color-border-strong: #9ca3af;
+
+  --demo-color-primary: #2563eb;
+  --demo-color-primary-hover: #1d4ed8;
+  --demo-color-primary-tint: rgba(37, 99, 235, 0.12);
+
+  --demo-color-cart-accent-border: #c7d2fe;
+
+  --demo-color-success: #15803d;
+  --demo-color-success-emphasis: #166534;
+  --demo-color-success-bg: #f0fdf4;
+  --demo-color-success-border: #bbf7d0;
+
+  --demo-color-error: #b91c1c;
+  --demo-color-error-bg: #fef2f2;
+  --demo-color-error-border: #fecaca;
+
+  --demo-shadow-card: 0 8px 24px rgba(0, 0, 0, 0.08);
+  --demo-shadow-cart: 0 8px 28px var(--demo-color-primary-tint);
+}
+
+html,
+body,
+#app {
+  margin: 0;
+  min-height: 100vh;
+}

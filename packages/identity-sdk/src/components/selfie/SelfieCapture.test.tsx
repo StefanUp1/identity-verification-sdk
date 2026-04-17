@@ -5,6 +5,7 @@ import { SelfieCapture } from "./SelfieCapture";
 describe("SelfieCapture", () => {
   const originalMediaDevices = navigator.mediaDevices;
 
+  // Restore the original media devices after each test.
   afterEach(() => {
     vi.restoreAllMocks();
     Object.defineProperty(navigator, "mediaDevices", {
