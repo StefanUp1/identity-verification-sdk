@@ -171,8 +171,8 @@ export function SelfieCapture({
       setSdkError("Could not read the camera image.");
       return;
     }
-    ctx.drawImage(video, 0, 0, w, h);
-    const dataUrl = canvas.toDataURL("image/jpeg", 0.92);
+    ctx.drawImage(video, 0, 0, w, h); // copies the current frame pixels into canvas
+    const dataUrl = canvas.toDataURL("image/jpeg", 0.92); // encodes pixels as a JPEG data URL
     applyCapturedUrl(dataUrl);
   };
 

@@ -89,6 +89,28 @@ import type {
 } from "@identity-verification/sdk";
 ```
 
+### 4. Use the SDK outside React (Web Components)
+
+You can keep the same React implementation and consume it from other frameworks via custom elements.
+
+```ts
+import "@identity-verification/sdk/style.css";
+import { defineIdentitySdkElements } from "@identity-verification/sdk/web-components";
+
+defineIdentitySdkElements(); // registers idsdk-address-form, idsdk-phone-input, idsdk-selfie-capture
+```
+
+Then use tags in any framework/template:
+
+```html
+<idsdk-phone-input id="phone"></idsdk-phone-input>
+```
+
+Listen for integration events:
+
+- `idsdk-change` — emitted with `event.detail` value (`IdentityAddress` for address, string for phone/selfie)
+- `idsdk-blur` — emitted when control blur is triggered
+
 ## What this package exports (overview)
 
 Grouped for scanning; the source of truth is **`src/index.ts`**.

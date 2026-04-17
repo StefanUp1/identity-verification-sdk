@@ -17,14 +17,24 @@
         "default": "./dist/index.cjs"
       }
     },
+    "./web-components": {
+      "import": {
+        "types": "./dist/web-components.d.ts",
+        "default": "./dist/web-components.js"
+      },
+      "require": {
+        "types": "./dist/web-components.d.cts",
+        "default": "./dist/web-components.cjs"
+      }
+    },
     "./style.css": "./dist/index.css"
   },
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsup src/index.ts --format esm,cjs --dts",
-    "dev": "tsup src/index.ts --watch --format esm,cjs --dts",
+    "build": "tsup src/index.ts src/web-components.ts --format esm,cjs --dts",
+    "dev": "tsup src/index.ts src/web-components.ts --watch --format esm,cjs --dts",
     "test": "vitest run",
     "lint": "eslint .",
     "prepack": "pnpm run build"
